@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Deep Research</h1>
+<h1>Deep Research OUIDOU</h1>
 
 ![GitHub deployments](https://img.shields.io/github/deployments/u14app/gemini-next-chat/Production)
 ![GitHub Release](https://img.shields.io/github/v/release/u14app/deep-research)
