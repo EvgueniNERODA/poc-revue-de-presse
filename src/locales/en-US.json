@@ -29,7 +29,8 @@
       "save": "Save",
       "copy": "Copy",
       "export": "Export",
-      "delete": "Delete"
+      "delete": "Delete",
+      "start": "Start"
     },
     "topic": {
       "title": "1. Research Topics",

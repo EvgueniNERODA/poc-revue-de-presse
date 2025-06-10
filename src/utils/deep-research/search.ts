@@ -116,6 +116,35 @@ type SearxngSearchResult = {
   img_format?: "jpeg" | "Culture Snaxx" | "png";
 };
 
+interface SearchFilter {
+  startDate?: string;
+  endDate?: string;
+  allowedSites?: string[];
+}
+
+function filterSearchResults(results: any[], filter: SearchFilter) {
+  return results.filter(result => {
+    // Filtrage par date si spécifié
+    if (filter.startDate || filter.endDate) {
+      const resultDate = new Date(result.publishedDate);
+      if (filter.startDate && resultDate < new Date(filter.startDate)) {
+        return false;
+      }
+      if (filter.endDate && resultDate > new Date(filter.endDate)) {
+        return false;
+      }
+    }
+
+    // Filtrage par site si spécifié
+    if (filter.allowedSites && filter.allowedSites.length > 0) {
+      const resultUrl = new URL(result.url);
+      return filter.allowedSites.some(site => resultUrl.hostname.includes(site));
+    }
+
+    return true;
+  });
+}
+
 export interface SearchProviderOptions {
   provider: string;
   baseURL?: string;
@@ -123,6 +152,7 @@ export interface SearchProviderOptions {
   query: string;
   maxResult?: number;
   scope?: string;
+  filter?: SearchFilter;
 }
 
 export async function createSearchProvider({
@@ -132,6 +162,7 @@ export async function createSearchProvider({
   query,
   maxResult = 5,
   scope = "all",
+  filter,
 }: SearchProviderOptions) {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -158,8 +189,9 @@ export async function createSearchProvider({
       }
     );
     const { results = [], images = [] } = await response.json();
+    const filteredResults = filter ? filterSearchResults(results, filter) : results;
     return {
-      sources: (results as TavilySearchResult[])
+      sources: (filteredResults as TavilySearchResult[])
         .filter((item) => item.content && item.url)
         .map((result) => {
           return {

@@ -2,6 +2,31 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { pick } from "radash";
 
+export interface Task {
+  query: string;
+  researchGoal: string;
+  state: "unprocessed" | "processing" | "completed" | "failed";
+  learning: string;
+  sources?: Source[];
+  images?: ImageSource[];
+}
+
+export interface Source {
+  url: string;
+  title?: string;
+}
+
+export interface ImageSource {
+  url: string;
+  description?: string;
+}
+
+export interface PressReviewParams {
+  startDate: string;
+  endDate: string;
+  allowedSites: string[];
+}
+
 export interface TaskStore {
   id: string;
   question: string;
@@ -11,30 +36,31 @@ export interface TaskStore {
   feedback: string;
   reportPlan: string;
   suggestion: string;
-  tasks: SearchTask[];
+  tasks: Task[];
   requirement: string;
   title: string;
   finalReport: string;
   sources: Source[];
   images: ImageSource[];
   knowledgeGraph: string;
+  pressReviewParams: PressReviewParams;
 }
 
 interface TaskFunction {
-  update: (tasks: SearchTask[]) => void;
+  update: (tasks: Task[]) => void;
   setId: (id: string) => void;
   setTitle: (title: string) => void;
   setSuggestion: (suggestion: string) => void;
   setRequirement: (requirement: string) => void;
   setQuery: (query: string) => void;
-  updateTask: (query: string, task: Partial<SearchTask>) => void;
+  updateTask: (query: string, data: Partial<Task>) => void;
   removeTask: (query: string) => boolean;
   setQuestion: (question: string) => void;
   addResource: (resource: Resource) => void;
   updateResource: (id: string, resource: Partial<Resource>) => void;
   removeResource: (id: string) => boolean;
   updateQuestions: (questions: string) => void;
-  updateReportPlan: (plan: string) => void;
+  updateReportPlan: (reportPlan: string) => void;
   updateFinalReport: (report: string) => void;
   setSources: (sources: Source[]) => void;
   setImages: (images: Source[]) => void;
@@ -44,6 +70,7 @@ interface TaskFunction {
   reset: () => void;
   backup: () => TaskStore;
   restore: (taskStore: TaskStore) => void;
+  setPressReviewParams: (params: PressReviewParams) => void;
 }
 
 const defaultValues: TaskStore = {
@@ -62,6 +89,11 @@ const defaultValues: TaskStore = {
   sources: [],
   images: [],
   knowledgeGraph: "",
+  pressReviewParams: {
+    startDate: "",
+    endDate: "",
+    allowedSites: ["lemonde.fr", "leparisien.fr", "lequipe.fr"],
+  },
 };
 
 export const useTaskStore = create(
@@ -74,9 +106,9 @@ export const useTaskStore = create(
       setSuggestion: (suggestion) => set(() => ({ suggestion })),
       setRequirement: (requirement) => set(() => ({ requirement })),
       setQuery: (query) => set(() => ({ query })),
-      updateTask: (query, task) => {
+      updateTask: (query, data) => {
         const newTasks = get().tasks.map((item) => {
-          return item.query === query ? { ...item, ...task } : item;
+          return item.query === query ? { ...item, ...data } : item;
         });
         set(() => ({ tasks: [...newTasks] }));
       },
@@ -102,7 +134,7 @@ export const useTaskStore = create(
         return true;
       },
       updateQuestions: (questions) => set(() => ({ questions })),
-      updateReportPlan: (plan) => set(() => ({ reportPlan: plan })),
+      updateReportPlan: (reportPlan) => set(() => ({ reportPlan })),
       updateFinalReport: (report) => set(() => ({ finalReport: report })),
       setSources: (sources) => set(() => ({ sources })),
       setImages: (images) => set(() => ({ images })),
@@ -116,6 +148,7 @@ export const useTaskStore = create(
         } as TaskStore;
       },
       restore: (taskStore) => set(() => ({ ...taskStore })),
+      setPressReviewParams: (params) => set(() => ({ pressReviewParams: params })),
     }),
     { name: "research" }
   )

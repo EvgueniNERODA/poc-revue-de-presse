@@ -24,6 +24,7 @@ import {
   reviewSerpQueriesPrompt,
   writeFinalReportPrompt,
   getSERPQuerySchema,
+  writePressReviewPrompt,
 } from "@/utils/deep-research/prompts";
 import { isNetworkingModel } from "@/utils/model";
 import { ThinkTagStreamProcessor, removeJsonMarkdown } from "@/utils/text";
@@ -50,7 +51,7 @@ function useDeepResearch() {
   const [status, setStatus] = useState<string>("");
 
   async function askQuestions() {
-    const { question } = useTaskStore.getState();
+    const { question, pressReviewParams } = useTaskStore.getState();
     const { thinkingModel } = getModel();
     setStatus(t("research.common.thinking"));
     const thinkTagStreamProcessor = new ThinkTagStreamProcessor();
@@ -58,7 +59,12 @@ function useDeepResearch() {
       model: await createModelProvider(thinkingModel),
       system: getSystemPrompt(),
       prompt: [
-        generateQuestionsPrompt(question),
+        writePressReviewPrompt(
+          question,
+          pressReviewParams.startDate,
+          pressReviewParams.endDate,
+          pressReviewParams.allowedSites
+        ),
         getResponseLanguagePrompt(),
       ].join("\n\n"),
       onError: handleError,

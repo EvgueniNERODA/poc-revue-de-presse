@@ -37,16 +37,20 @@ import { useGlobalStore } from "@/store/global";
 import { useSettingStore } from "@/store/setting";
 import { useTaskStore } from "@/store/task";
 import { useHistoryStore } from "@/store/history";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  topic: z.string().min(2),
+  topic: z.string().min(1, "Le sujet est requis"),
+  startDate: z.string().min(1, "La date de début est requise"),
+  endDate: z.string().min(1, "La date de fin est requise"),
+  allowedSites: z.string().min(1, "Les sites autorisés sont requis"),
 });
 
 function Topic() {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const taskStore = useTaskStore();
-  const { askQuestions } = useDeepResearch();
+  const { status, askQuestions } = useDeepResearch();
   const { hasApiKey } = useAiProvider();
   const { getKnowledgeFromFile } = useKnowledge();
   const {
@@ -61,6 +65,9 @@ function Topic() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       topic: taskStore.question,
+      startDate: taskStore.pressReviewParams.startDate,
+      endDate: taskStore.pressReviewParams.endDate,
+      allowedSites: taskStore.pressReviewParams.allowedSites.join(", "),
     },
   });
 
@@ -77,7 +84,7 @@ function Topic() {
 
   async function handleSubmit(values: z.infer<typeof formSchema>) {
     if (handleCheck()) {
-      const { id, setQuestion } = useTaskStore.getState();
+      const { id, setQuestion, setPressReviewParams } = useTaskStore.getState();
       try {
         setIsThinking(true);
         accurateTimerStart();
@@ -86,6 +93,11 @@ function Topic() {
           form.setValue("topic", values.topic);
         }
         setQuestion(values.topic);
+        setPressReviewParams({
+          startDate: values.startDate,
+          endDate: values.endDate,
+          allowedSites: values.allowedSites.split(",").map(site => site.trim()),
+        });
         await askQuestions();
       } finally {
         setIsThinking(false);
@@ -141,7 +153,7 @@ function Topic() {
         </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="topic"
@@ -156,6 +168,42 @@ function Topic() {
                     placeholder={t("research.topic.topicPlaceholder")}
                     {...field}
                   />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date de début</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date de fin</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="allowedSites"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sites autorisés (séparés par des virgules)</FormLabel>
+                <FormControl>
+                  <Input placeholder="lemonde.fr, leparisien.fr, lequipe.fr" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -208,13 +256,11 @@ function Topic() {
             {isThinking ? (
               <>
                 <LoaderCircle className="animate-spin" />
-                <span>{t("research.common.thinkingQuestion")}</span>
+                <span>{status}</span>
                 <small className="font-mono">{formattedTime}</small>
               </>
-            ) : taskStore.questions === "" ? (
-              t("research.common.startThinking")
             ) : (
-              t("research.common.rethinking")
+              t("research.common.startThinking")
             )}
           </Button>
         </form>

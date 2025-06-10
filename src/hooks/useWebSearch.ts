@@ -6,14 +6,21 @@ import {
 import { multiApiKeyPolling } from "@/utils/model";
 import { generateSignature } from "@/utils/signature";
 
+interface SearchFilters {
+  startDate?: string;
+  endDate?: string;
+  allowedSites?: string[];
+}
+
 function useWebSearch() {
-  async function search(query: string) {
+  async function search(query: string, filters?: SearchFilters) {
     const { mode, searchProvider, searchMaxResult, accessPassword } =
       useSettingStore.getState();
     const options: SearchProviderOptions = {
       provider: searchProvider,
       maxResult: searchMaxResult,
       query,
+      filter: filters,
     };
 
     switch (searchProvider) {
@@ -66,14 +73,35 @@ function useWebSearch() {
         }
         options.scope = searxngScope;
         break;
-      default:
-        break;
     }
 
-    if (mode === "proxy") {
-      options.apiKey = generateSignature(accessPassword, Date.now());
+    const response = await fetch(
+      `${options.baseURL}/search`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.apiKey && {
+            Authorization: `Bearer ${options.apiKey}`,
+          }),
+          ...(accessPassword && {
+            "X-Access-Password": generateSignature(accessPassword, Date.now()),
+          }),
+        },
+        body: JSON.stringify({
+          query: options.query,
+          maxResult: options.maxResult,
+          scope: options.scope,
+          filter: options.filter,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Search failed: ${response.statusText}`);
     }
-    return createSearchProvider(options);
+
+    return response.json();
   }
 
   return { search };

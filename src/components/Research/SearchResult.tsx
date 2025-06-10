@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { toast } from "sonner";
 import {
   LoaderCircle,
@@ -34,9 +34,11 @@ import { Separator } from "@/components/ui/separator";
 import useAccurateTimer from "@/hooks/useAccurateTimer";
 import useDeepResearch from "@/hooks/useDeepResearch";
 import useKnowledge from "@/hooks/useKnowledge";
-import { useTaskStore } from "@/store/task";
+import { useTaskStore, type Task } from "@/store/task";
 import { useKnowledgeStore } from "@/store/knowledge";
 import { downloadFile } from "@/utils/file";
+import { renderToStaticMarkup } from 'react-dom/server';
+import useWebSearch from "@/hooks/useWebSearch";
 
 const MagicDown = dynamic(() => import("@/components/MagicDown"));
 const MagicDownView = dynamic(() => import("@/components/MagicDown/View"));
@@ -53,7 +55,7 @@ function addQuoteBeforeAllLine(text: string = "") {
     .join("\n");
 }
 
-function TaskState({ state }: { state: SearchTask["state"] }) {
+function TaskState({ state }: { state: Task["state"] }) {
   if (state === "completed") {
     return <CircleCheck className="h-5 w-5" />;
   } else if (state === "processing") {
@@ -66,7 +68,8 @@ function TaskState({ state }: { state: SearchTask["state"] }) {
 function SearchResult() {
   const { t } = useTranslation();
   const taskStore = useTaskStore();
-  const { status, runSearchTask, reviewSearchResult } = useDeepResearch();
+  const { status, reviewSearchResult } = useDeepResearch();
+  const { search: webSearch } = useWebSearch();
   const { generateId } = useKnowledge();
   const {
     formattedTime,
@@ -74,6 +77,11 @@ function SearchResult() {
     stop: accurateTimerStop,
   } = useAccurateTimer();
   const [isThinking, setIsThinking] = useState<boolean>(false);
+  const [searchFilters, setSearchFilters] = useState<{
+    startDate?: string;
+    endDate?: string;
+    allowedSites?: string[];
+  }>({});
   const unfinishedTasks = useMemo(() => {
     return taskStore.tasks.filter((item) => item.state !== "completed");
   }, [taskStore.tasks]);
@@ -88,30 +96,90 @@ function SearchResult() {
     },
   });
 
-  function getSearchResultContent(item: SearchTask) {
-    return [
-      `## ${item.query}`,
-      addQuoteBeforeAllLine(item.researchGoal),
-      "---",
-      item.learning,
-      item.images?.length > 0
-        ? `#### ${t("research.searchResult.relatedImages")}\n\n${item.images
-            .map(
-              (source) =>
-                `![${source.description || source.url}](${source.url})`
-            )
-            .join("\n")}`
-        : "",
-      item.sources?.length > 0
-        ? `#### ${t("research.common.sources")}\n\n${item.sources
-            .map(
-              (source, idx) =>
-                `${idx + 1}. [${source.title || source.url}][${idx + 1}]`
-            )
-            .join("\n")}`
-        : "",
-    ].join("\n\n");
-  }
+  const handleSearch = async () => {
+    if (!taskStore.suggestion.trim()) return;
+
+    const task: Task = {
+      query: taskStore.suggestion,
+      researchGoal: taskStore.suggestion,
+      state: "unprocessed",
+      learning: "",
+      sources: [],
+      images: [],
+    };
+
+    taskStore.updateTask(task.query, task);
+
+    try {
+      const filters = {
+        startDate: searchFilters.startDate ? new Date(searchFilters.startDate).toISOString() : undefined,
+        endDate: searchFilters.endDate ? new Date(searchFilters.endDate).toISOString() : undefined,
+        allowedSites: searchFilters.allowedSites && searchFilters.allowedSites.length > 0 ? searchFilters.allowedSites : undefined,
+      };
+
+      const results = await webSearch(taskStore.suggestion, filters);
+      const newTask: Task = {
+        ...task,
+        state: "completed",
+        sources: results.sources || [],
+        images: results.images || [],
+      };
+      taskStore.updateTask(task.query, newTask);
+    } catch (error) {
+      console.error("Search failed:", error);
+      const failedTask: Task = { ...task, state: "failed" };
+      taskStore.updateTask(task.query, failedTask);
+    }
+  };
+
+  const getSearchResultContent = (item: Task): React.ReactNode => {
+    const sources = item.sources || [];
+    const images = item.images || [];
+    return (
+      <div className="space-y-4">
+        {sources.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Sources</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              {sources.map((source: Source, index: number) => (
+                <li key={index}>
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {source.title || source.url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {images.length > 0 && (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Images</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {images.map((image: ImageSource, index: number) => (
+                <div key={index} className="relative">
+                  <img
+                    src={image.url}
+                    alt={image.description || "Image"}
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                  {image.description && (
+                    <p className="mt-2 text-sm text-gray-600">
+                      {image.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   async function handleSubmit(values: z.infer<typeof formSchema>) {
     const { setSuggestion } = useTaskStore.getState();
@@ -119,7 +187,7 @@ function SearchResult() {
       accurateTimerStart();
       setIsThinking(true);
       if (unfinishedTasks.length > 0) {
-        await runSearchTask(unfinishedTasks);
+        await handleSearch();
       } else {
         if (values.suggestion) setSuggestion(values.suggestion);
         await reviewSearchResult();
@@ -132,13 +200,14 @@ function SearchResult() {
     }
   }
 
-  function addToKnowledgeBase(item: SearchTask) {
+  function addToKnowledgeBase(item: Task) {
     const { save } = useKnowledgeStore.getState();
     const currentTime = Date.now();
+    const content = renderToStaticMarkup(getSearchResultContent(item));
     save({
       id: generateId("knowledge"),
       title: item.query,
-      content: getSearchResultContent(item),
+      content,
       type: "knowledge",
       createdAt: currentTime,
       updatedAt: currentTime,
@@ -148,7 +217,7 @@ function SearchResult() {
 
   async function handleRetry(query: string, researchGoal: string) {
     const { updateTask } = useTaskStore.getState();
-    const newTask: SearchTask = {
+    const newTask: Task = {
       query,
       researchGoal,
       learning: "",
@@ -157,7 +226,7 @@ function SearchResult() {
       state: "unprocessed",
     };
     updateTask(query, newTask);
-    await runSearchTask([newTask]);
+    await handleSearch();
   }
 
   function handleRemove(query: string) {
@@ -254,7 +323,7 @@ function SearchResult() {
                             sideoffset={8}
                             onClick={() =>
                               downloadFile(
-                                getSearchResultContent(item),
+                                renderToStaticMarkup(getSearchResultContent(item)),
                                 `${item.query}.md`,
                                 "text/markdown;charset=utf-8"
                               )
@@ -265,30 +334,28 @@ function SearchResult() {
                         </>
                       }
                     ></MagicDown>
-                    {item.images?.length > 0 ? (
+                    {item.images && item.images.length > 0 && (
                       <>
                         <hr className="my-6" />
                         <h4>{t("research.searchResult.relatedImages")}</h4>
-                        <Lightbox data={item.images}></Lightbox>
+                        <Lightbox data={item.images} />
                       </>
-                    ) : null}
-                    {item.sources?.length > 0 ? (
+                    )}
+                    {item.sources && item.sources.length > 0 && (
                       <>
                         <hr className="my-6" />
                         <h4>{t("research.common.sources")}</h4>
                         <ol>
-                          {item.sources.map((source, idx) => {
-                            return (
-                              <li className="ml-2" key={idx}>
-                                <a href={source.url} target="_blank">
-                                  {source.title || source.url}
-                                </a>
-                              </li>
-                            );
-                          })}
+                          {item.sources.map((source, idx) => (
+                            <li className="ml-2" key={idx}>
+                              <a href={source.url} target="_blank">
+                                {source.title || source.url}
+                              </a>
+                            </li>
+                          ))}
                         </ol>
                       </>
-                    ) : null}
+                    )}
                   </AccordionContent>
                 </AccordionItem>
               );

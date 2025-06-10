@@ -138,6 +138,11 @@ The following context from the SERP search:
 {context}
 </CONTEXT>
 
+IMPORTANT RESTRICTIONS:
+- Only consider content from the following websites: {allowedSites}
+- Only consider content published between {startDate} and {endDate}
+- Exclude any content that doesn't meet these criteria
+
 You need to think like a human researcher.
 Generate a list of learnings from the contexts.
 Make sure each learning is unique and not similar to each other.
@@ -247,3 +252,58 @@ export const knowledgeGraphPrompt = `Based on the following article, please extr
 5. Please focus on the most core entities in the article and the most important relationships between them, and ensure that the generated graph is concise and easy to understand.
 6. All text content **MUST** be wrapped in \`"\` syntax. (e.g., "Any Text Content")
 7. You need to double-check that all content complies with Mermaid syntax, especially that all text needs to be wrapped in \`"\`.`;
+
+export const pressReviewPrompt = `Je suis analyste média en charge de produire une revue de presse quotidienne sur des thématiques spécifiques.
+Je souhaite aujourd'hui effectuer une recherche approfondie sur :
+<QUERY>
+{query}
+</QUERY>
+
+Période analysée : {startDate} au {endDate}
+Sources autorisées : {allowedSites}
+
+Merci de me fournir le résultat structuré suivant :
+1. Synthèse globale de la thématique
+ 
+    Résumé synthétique (environ 300 mots) des sujets abordés dans les articles : faits majeurs, analyses, polémiques, acteurs clés, etc.
+ 
+    Évolution de la couverture médiatique sur la période.
+ 
+    Ton général des commentaires sur les articles (positif, négatif, polémique, satirique, divisé, etc.), s'il est disponible.
+ 
+2. Les 5 articles les plus pertinents sur la période
+ 
+Pour chaque article, indiquer :
+ 
+    Titre complet de l'article
+ 
+    Date de publication
+ 
+    Résumé (5 à 7 lignes) du contenu de l'article
+ 
+    Ton dominant des commentaires (positif / négatif / ironique / conflictuel / factuel / non disponible), avec justification synthétique
+ 
+    Source du média (nom du site)
+ 
+    Lien URL vers l'article
+ 
+    Audience estimée :
+    (élevée / modérée / faible), sur la base :
+ 
+        de son classement SEO,
+ 
+        de la popularité du média,
+ 
+        des signaux sociaux visibles (partages, réactions),
+ 
+        ou de données de trafic estimées (si disponibles)
+ 
+Contraintes
+ 
+    Ne pas inclure d'articles en doublon ou trop similaires.
+ 
+    Privilégier la diversité des angles éditoriaux (analyse, reportage, opinion, etc.).
+ 
+    Si certaines données (commentaires, SEO, audience) sont indisponibles, l'indiquer clairement.
+ 
+    Utiliser exclusivement les sources définies`;

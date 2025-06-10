@@ -13,6 +13,7 @@ import {
   finalReportCitationImagePrompt,
   finalReportReferencesPrompt,
   finalReportPrompt,
+  pressReviewPrompt,
 } from "@/constants/prompts";
 
 export function getSERPQuerySchema() {
@@ -142,4 +143,17 @@ export function writeFinalReportPrompt(
     .replace("{sources}", sources.join("\n"))
     .replace("{images}", imageList.join("\n"))
     .replace("{requirement}", requirement);
+}
+
+export function writePressReviewPrompt(
+  query: string,
+  startDate: string,
+  endDate: string,
+  allowedSites: string[]
+) {
+  return pressReviewPrompt
+    .replace("{query}", query)
+    .replace("{startDate}", startDate)
+    .replace("{endDate}", endDate)
+    .replace("{allowedSites}", allowedSites.join(", "));
 }
