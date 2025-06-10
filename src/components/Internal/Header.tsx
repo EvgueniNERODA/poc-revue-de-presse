@@ -13,24 +13,13 @@ function Header() {
   return (
     <>
       <header className="flex justify-between items-center my-6 max-sm:my-4 print:hidden">
-        <a href="https://github.com/u14app/deep-research" target="_blank">
+        <div>
           <h1 className="text-left text-xl font-semibold">
             {t("title")}
-            <small className="ml-2 font-normal text-base">v{VERSION}</small>
           </h1>
-        </a>
+        </div>
         <div className="flex">
-          <a href="https://github.com/u14app/deep-research" target="_blank">
-            <Button
-              className="h-8 w-8"
-              title={t("openSource")}
-              variant="ghost"
-              size="icon"
-            >
-              <Github className="h-5 w-5" />
-            </Button>
-          </a>
-          <Button
+          {/*<Button
             className="h-8 w-8"
             variant="ghost"
             size="icon"
@@ -38,8 +27,8 @@ function Header() {
             onClick={() => setOpenHistory(true)}
           >
             <History className="h-5 w-5" />
-          </Button>
-          <Button
+          </Button>*/}
+          {/*<Button
             className="h-8 w-8"
             variant="ghost"
             size="icon"
@@ -47,7 +36,7 @@ function Header() {
             onClick={() => setOpenKnowledge(true)}
           >
             <BookText />
-          </Button>
+          </Button>*/}
           <Button
             className="h-8 w-8"
             title={t("setting.title")}

@@ -388,9 +388,9 @@ function Setting({ open, onClose }: SettingProps) {
                 <TabsTrigger className="flex-1" value="general">
                   {t("setting.general")}
                 </TabsTrigger>
-                <TabsTrigger className="flex-1" value="experimental">
+                {/*<TabsTrigger className="flex-1" value="experimental">
                   {t("setting.experimental")}
-                </TabsTrigger>
+                </TabsTrigger>*/}
               </TabsList>
               <TabsContent className="space-y-4  min-h-[250px]" value="llm">
                 <div className={BUILD_MODE === "export" ? "hidden" : ""}>
@@ -399,11 +399,11 @@ function Setting({ open, onClose }: SettingProps) {
                     name="mode"
                     render={({ field }) => (
                       <FormItem className="from-item">
-                        <FormLabel className="from-label">
+                        {/*<FormLabel className="from-label">
                           <HelpTip tip={t("setting.modeTip")}>
                             {t("setting.mode")}
                           </HelpTip>
-                        </FormLabel>
+                        </FormLabel>*/}
                         <FormControl>
                           <Select
                             value={field.value}
@@ -3199,12 +3199,12 @@ function Setting({ open, onClose }: SettingProps) {
                   name="language"
                   render={({ field }) => (
                     <FormItem className="from-item">
-                      <FormLabel className="from-label">
+                      {/*<FormLabel className="from-label">
                         <HelpTip tip={t("setting.languageTip")}>
                           {t("setting.language")}
                         </HelpTip>
-                      </FormLabel>
-                      <FormControl>
+                      </FormLabel>*/}
+                      {/*<FormControl>
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
@@ -3222,7 +3222,7 @@ function Setting({ open, onClose }: SettingProps) {
                             })}
                           </SelectContent>
                         </Select>
-                      </FormControl>
+                      </FormControl>*/}
                     </FormItem>
                   )}
                 />
@@ -3303,8 +3303,8 @@ function Setting({ open, onClose }: SettingProps) {
                   </div>
                 ) : null}
                 <div className="from-item">
-                  <Label className="from-label">{t("setting.version")}</Label>
-                  <div className="form-field text-center leading-9">
+                 {/* <Label className="from-label">{t("setting.version")}</Label>*/}
+                  {/*<div className="form-field text-center leading-9">
                     {`v${VERSION}`}
                     <small className="ml-1">
                       (
@@ -3317,7 +3317,7 @@ function Setting({ open, onClose }: SettingProps) {
                       </a>
                       )
                     </small>
-                  </div>
+                  </div>*/}
                 </div>
                 <div className="from-item">
                   <Label className="from-label">
