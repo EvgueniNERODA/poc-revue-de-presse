@@ -1,27 +1,27 @@
 {
-  "title": "Deep Research",
+  "title": "Revue de presse",
   "theme": "Theme",
   "openSource": "Open Source",
   "copyright": "Created with ❤️ by {{name}} team",
   "searchPlaceholder": "Please enter keywords",
   "research": {
     "common": {
-      "startThinking": "Start Thinking",
-      "rethinking": "Rethinking",
+      "startThinking": "Démarrer la recherche",
+      "rethinking": "Re-démarrer la recherche",
       "thinkingQuestion": "Thinking Question...",
-      "writeReportPlan": "Write Report Plan",
-      "rewriteReportPlan": "Rewrite Report Plan",
-      "startResearch": "Start Research",
-      "restartResearch": "Restart Research",
-      "writeReport": "Write Report",
+      "writeReportPlan": "Ecrire le plan",
+      "rewriteReportPlan": "Re-écrire le plan",
+      "startResearch": "Démarrer la recherche",
+      "restartResearch": "Re-démarrer la recherche",
+      "writeReport": "Ecrire la revue",
       "continueResearch": "Continue Research",
       "indepthResearch": "Further Research",
-      "rewriteReport": "Rewrite Report",
+      "rewriteReport": "Re-écrire la revue",
       "sources": "Sources",
-      "thinking": "Thinking...",
-      "research": "Research...",
-      "writing": "Writing...",
-      "newResearch": "New Research",
+      "thinking": "Rérlexion...",
+      "research": "Recherche...",
+      "writing": "Ecriture...",
+      "newResearch": "Nouvelle recherche",
       "addToKnowledgeBase": "Add to Knowledge Base",
       "addToKnowledgeBaseTip": "Added to Knowledge Base",
       "restudy": "Re-study",
@@ -32,17 +32,17 @@
       "delete": "Delete"
     },
     "topic": {
-      "title": "1. Research Topics",
-      "topicLabel": "1.1 Research topics",
-      "topicPlaceholder": "Any questions you want to know..."
+      "title": "1. Thèmes recherchés",
+      "topicLabel": "1.1 Thèmes recherchés",
+      "topicPlaceholder": "Ajoutez un thème à rechercher"
     },
     "feedback": {
-      "title": "2. Ask Question",
+      "title": "2. Poser question",
       "emptyTip": "Waiting for research topic...",
-      "feedbackLabel": "Your Answer (Optional)",
-      "feedbackPlaceholder": "You can answer whatever you want...",
-      "questions": "2.1 System Questions",
-      "reportPlan": "2.2 Research report plan"
+      "feedbackLabel": "Votre question (optionnel)",
+      "feedbackPlaceholder": "Vou pouvez demander ce que vous souhaitez...",
+      "questions": "2.1 Questions",
+      "reportPlan": "2.2 Préparation du plan"
     },
     "searchResult": {
       "title": "3. Information Collection",
@@ -53,12 +53,12 @@
       "relatedImages": "Related Images"
     },
     "finalReport": {
-      "title": "4. Final Report",
-      "emptyTip": "Waiting for data to be collated...",
-      "researchedInfor": "Researched {{total}} websites",
-      "localResearchedInfor": "Researched {{total}} local resources",
-      "writingRequirementLabel": "Writing requirements (optional)",
-      "writingRequirementPlaceholder": "You can raise any request related to report writing."
+      "title": "4. Revue finale",
+      "emptyTip": "En attente de données à collecter...",
+      "researchedInfor": "Recherché sur {{total}} websites",
+      "localResearchedInfor": "Recherché {{total}} local resources",
+      "writingRequirementLabel": "Suggéstions d'écriture (optionnel)",
+      "writingRequirementPlaceholder": "Vous pouvez poser des question en rapport avec la revue générée."
     }
   },
   "history": {
@@ -104,8 +104,8 @@
     "localCrawler": "Local Crawler",
     "clear": "Clear",
     "fetch": "Fetch",
-    "localResourceTitle": "1.2 Local research resources (optional)",
-    "addResource": "Add Resource",
+    "localResourceTitle": "1.2 Fichiers (optionnel)",
+    "addResource": "Ajouter fichier",
     "addResourceMessage": "{{title}} has been added to the resource.",
     "resourceNotFound": "Resource not found",
     "knowledge": "Knowledge",
