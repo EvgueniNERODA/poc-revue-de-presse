@@ -38,7 +38,7 @@
     },
     "feedback": {
       "title": "2. Ask Question",
-      "emptyTip": "Waiting for research topic...",
+      "emptyTip": "En attente de la génération des questions...",
       "feedbackLabel": "Your Answer (Optional)",
       "feedbackPlaceholder": "You can answer whatever you want...",
       "questions": "2.1 System Questions",
@@ -46,7 +46,7 @@
     },
     "searchResult": {
       "title": "3. Information Collection",
-      "emptyTip": "Waiting for research task...",
+      "emptyTip": "En attente de la génération du plan...",
       "suggestionLabel": "Research suggestions (Optional)",
       "suggestionPlaceholder": "Whether to add or adjust research directions...",
       "references": "References",
@@ -54,7 +54,7 @@
     },
     "finalReport": {
       "title": "4. Final Report",
-      "emptyTip": "Waiting for data to be collated...",
+      "emptyTip": "En attente des information à rechercher...",
       "researchedInfor": "Researched {{total}} websites",
       "localResearchedInfor": "Researched {{total}} local resources",
       "writingRequirementLabel": "Writing requirements (optional)",
