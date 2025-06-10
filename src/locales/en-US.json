@@ -46,7 +46,7 @@
     },
     "searchResult": {
       "title": "3. Information Collection",
-      "emptyTip": "Waiting for research task...",
+      "emptyTip": "En attente de la génération du plan...",
       "suggestionLabel": "Research suggestions (Optional)",
       "suggestionPlaceholder": "Whether to add or adjust research directions...",
       "references": "References",

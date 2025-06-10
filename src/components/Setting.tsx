@@ -451,50 +451,11 @@ function Setting({ open, onClose }: SettingProps) {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="max-sm:max-h-72">
-                            {!isDisabledAIProvider("google") ? (
-                              <SelectItem value="google">
-                                Google AI Studio
-                              </SelectItem>
-                            ) : null}
                             {!isDisabledAIProvider("openai") ? (
                               <SelectItem value="openai">OpenAI</SelectItem>
                             ) : null}
-                            {!isDisabledAIProvider("anthropic") ? (
-                              <SelectItem value="anthropic">
-                                Anthropic
-                              </SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("deepseek") ? (
-                              <SelectItem value="deepseek">DeepSeek</SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("xai") ? (
-                              <SelectItem value="xai">xAI Grok</SelectItem>
-                            ) : null}
                             {!isDisabledAIProvider("mistral") ? (
                               <SelectItem value="mistral">Mistral</SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("azure") ? (
-                              <SelectItem value="azure">
-                                Azure OpenAI
-                              </SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("openrouter") ? (
-                              <SelectItem value="openrouter">
-                                OpenRouter
-                              </SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("openaicompatible") ? (
-                              <SelectItem value="openaicompatible">
-                                {t("setting.openAICompatible")}
-                              </SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("pollinations") ? (
-                              <SelectItem value="pollinations">
-                                Pollinations ({t("setting.free")})
-                              </SelectItem>
-                            ) : null}
-                            {!isDisabledAIProvider("ollama") ? (
-                              <SelectItem value="ollama">Ollama</SelectItem>
                             ) : null}
                           </SelectContent>
                         </Select>
