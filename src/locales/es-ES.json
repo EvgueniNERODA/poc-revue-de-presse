@@ -58,7 +58,13 @@
       "researchedInfor": "Se investigaron {{total}} sitios web",
       "localResearchedInfor": "Se investigaron {{total}} recursos locales",
       "writingRequirementLabel": "Requisitos de redacción (opcional)",
-      "writingRequirementPlaceholder": "Puedes indicar cualquier requisito relacionado con la redacción del informe."
+      "writingRequirementPlaceholder": "Puedes indicar cualquier requisito relacionado con la redacción del informe.",
+      "sendEmail": "Envoyer par Email",
+      "emailNotConfigured": "Email non configuré. Veuillez configurer les paramètres email d'abord.",
+      "emailSent": "Email envoyé avec succès !",
+      "emailError": "Erreur lors de l'envoi de l'email. Veuillez réessayer.",
+      "emailAutoSent": "Rapport envoyé automatiquement par email !",
+      "emailAutoError": "Erreur lors de l'envoi automatique de l'email. Veuillez vérifier votre configuration Resend."
     }
   },
   "history": {
@@ -323,10 +329,21 @@
     "experimental": "Experimental",
     "references": "Referencias",
     "referencesTip": "Al habilitar las referencias, se añadirán enlaces de referencia a los resultados de búsqueda y a los informes finales mediante una solicitud. Esto podría no funcionar bien con modelos pequeños.",
-    "citationImage": "Imagen de cita",
-    "citationImageTip": "Al habilitar las imágenes de referencia, se intentará añadir imágenes relacionadas con el contenido al informe final mediante una solicitud.",
-    "save": "Guardar",
-    "confirm": "Confirmar",
-    "cancel": "Cancelar"
+    "citationImage": "Citation Image",
+    "citationImageTip": "Enabling reference images will attempt to add content-related images to the final report through a prompt.",
+    "email": {
+      "title": "Paramètres Email",
+      "enabled": "Notification Email",
+      "enabledTip": "Activer l'envoi automatique d'email lorsque le rapport est terminé.",
+      "address": "Adresse Email",
+      "addressPlaceholder": "Entrez l'adresse email pour recevoir le rapport",
+      "subject": "Sujet de l'Email",
+      "subjectPlaceholder": "Entrez le sujet de l'email (optionnel)",
+      "body": "Corps de l'Email",
+      "bodyPlaceholder": "Entrez le texte du corps de l'email (optionnel)"
+    },
+    "save": "Save",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   }
 }

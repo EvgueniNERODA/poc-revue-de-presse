@@ -67,7 +67,6 @@ import {
   BOCHA_BASE_URL,
   SEARXNG_BASE_URL,
 } from "@/constants/urls";
-import locales from "@/constants/locales";
 import {
   filterThinkingModelList,
   filterNetworkingModelList,
@@ -81,6 +80,7 @@ import {
 import { researchStore } from "@/utils/storage";
 import { cn } from "@/utils/style";
 import { omit, capitalize } from "radash";
+import { Textarea } from "@/components/ui/textarea";
 
 type SettingProps = {
   open: boolean;
@@ -162,6 +162,11 @@ const formSchema = z.object({
   debug: z.string().optional(),
   references: z.string().optional(),
   citationImage: z.string().optional(),
+  // Email settings
+  emailEnabled: z.string().optional(),
+  emailAddress: z.string().optional(),
+  emailSubject: z.string().optional(),
+  emailBody: z.string().optional(),
 });
 
 function convertModelName(name: string) {
@@ -3331,6 +3336,97 @@ function Setting({ open, onClose }: SettingProps) {
                   >
                     {t("setting.resetAllSettings")}
                   </Button>
+                </div>
+                
+                {/* Email Settings */}
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="text-lg font-semibold mb-4">{t("setting.email.title")}</h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name="emailEnabled"
+                    render={({ field }) => (
+                      <FormItem className="from-item">
+                        <FormLabel className="from-label">
+                          <HelpTip tip={t("setting.email.enabledTip")}>
+                            {t("setting.email.enabled")}
+                          </HelpTip>
+                        </FormLabel>
+                        <FormControl>
+                          <Select {...field} onValueChange={field.onChange}>
+                            <SelectTrigger className="form-field">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="enable">
+                                {t("setting.enable")}
+                              </SelectItem>
+                              <SelectItem value="disable">
+                                {t("setting.disable")}
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="emailAddress"
+                    render={({ field }) => (
+                      <FormItem className="from-item">
+                        <FormLabel className="from-label">
+                          {t("setting.email.address")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("setting.email.addressPlaceholder")}
+                            className="form-field"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="emailSubject"
+                    render={({ field }) => (
+                      <FormItem className="from-item">
+                        <FormLabel className="from-label">
+                          {t("setting.email.subject")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("setting.email.subjectPlaceholder")}
+                            className="form-field"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="emailBody"
+                    render={({ field }) => (
+                      <FormItem className="from-item">
+                        <FormLabel className="from-label">
+                          {t("setting.email.body")}
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder={t("setting.email.bodyPlaceholder")}
+                            className="form-field min-h-[80px]"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </TabsContent>
               <TabsContent

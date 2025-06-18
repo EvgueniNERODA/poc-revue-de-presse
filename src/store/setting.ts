@@ -70,6 +70,11 @@ export interface SettingStore {
   debug: string;
   references: string;
   citationImage: string;
+  // Email settings
+  emailEnabled: string;
+  emailAddress: string;
+  emailSubject: string;
+  emailBody: string;
 }
 
 interface SettingFunction {
@@ -146,6 +151,11 @@ export const defaultValues: SettingStore = {
   debug: "disable",
   references: "enable",
   citationImage: "enable",
+  // Email settings
+  emailEnabled: "disable",
+  emailAddress: "",
+  emailSubject: "",
+  emailBody: "",
 };
 
 export const useSettingStore = create(
