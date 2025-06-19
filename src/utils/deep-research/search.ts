@@ -154,6 +154,7 @@ export async function createSearchProvider({
           include_image_descriptions: true,
           include_answer: false,
           include_raw_content: true,
+          //include_domains: ["lemonde.fr", "leparisien.fr", "liberation.fr", "humanite.fr", "lopinion.fr", "la-croix.com", "latribune.fr", "letemps.ch", "lesechos.fr", "lefigaro.fr", "lequipe.fr", "ouest-france.fr", "leparisien.fr", "alternatives-economiques.fr", "diplomatie.gouv.fr", "lalettre.fr", "bulletinquotidien.fr"],
         }),
       }
     );
@@ -290,21 +291,21 @@ export async function createSearchProvider({
       engines:
         scope === "academic"
           ? [
-              "arxiv",
-              "google scholar",
-              "pubmed",
-              "wikispecies",
-              "google_images",
-            ]
+            "arxiv",
+            "google scholar",
+            "pubmed",
+            "wikispecies",
+            "google_images",
+          ]
           : [
-              "google",
-              "bing",
-              "duckduckgo",
-              "brave",
-              "wikipedia",
-              "bing_images",
-              "google_images",
-            ],
+            "google",
+            "bing",
+            "duckduckgo",
+            "brave",
+            "wikipedia",
+            "bing_images",
+            "google_images",
+          ],
       lang: "auto",
       format: "json",
       autocomplete: "google",
