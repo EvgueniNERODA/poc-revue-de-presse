@@ -4,8 +4,6 @@ import { Settings } from "lucide-react";
 import { Button } from "@/components/Internal/Button";
 import { useGlobalStore } from "@/store/global";
 
-const VERSION = process.env.NEXT_PUBLIC_VERSION;
-
 function Header() {
   const { t } = useTranslation();
   const { setOpenSetting } = useGlobalStore();

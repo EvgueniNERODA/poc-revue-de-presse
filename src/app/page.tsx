@@ -18,7 +18,6 @@ const History = dynamic(() => import("@/components/History"));
 const Knowledge = dynamic(() => import("@/components/Knowledge"));
 
 function Home() {
-  const { t } = useTranslation();
   const {
     openSetting,
     setOpenSetting,

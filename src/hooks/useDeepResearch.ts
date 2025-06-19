@@ -557,7 +557,7 @@ function useDeepResearch() {
         } else {
           toast.error(t("research.finalReport.emailAutoError"));
         }
-      } catch (_error) {
+      } catch {
         toast.error(t("research.finalReport.emailAutoError"));
       }
     }

@@ -169,7 +169,7 @@ function FinalReport() {
       } else {
         toast.error(t("research.finalReport.emailError"));
       }
-    } catch (error) {
+    } catch {
       toast.error(t("research.finalReport.emailError"));
     }
   }
@@ -375,7 +375,7 @@ function FinalReport() {
                       } else {
                         toast.error(t("research.finalReport.emailError"));
                       }
-                    } catch (_error) {
+                    } catch {
                       toast.error(t("research.finalReport.emailError"));
                     } finally {
                       setIsWriting(false);
