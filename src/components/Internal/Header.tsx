@@ -8,7 +8,7 @@ const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
 function Header() {
   const { t } = useTranslation();
-  const { setOpenSetting v} = useGlobalStore();
+  const { setOpenSetting } = useGlobalStore();
 
   return (
     <>
