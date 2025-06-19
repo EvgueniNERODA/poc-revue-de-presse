@@ -131,7 +131,7 @@ export async function createSearchProvider({
   apiKey = "",
   query,
   maxResult = 5,
-  scope = "news",
+  scope = "all",
 }: SearchProviderOptions) {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -154,7 +154,7 @@ export async function createSearchProvider({
           include_image_descriptions: true,
           include_answer: false,
           include_raw_content: true,
-          include_domains: ["lemonde.fr", "leparisien.fr", "liberation.fr", "humanite.fr", "lopinion.fr", "la-croix.com", "latribune.fr", "letemps.ch", "lesechos.fr", "lefigaro.fr", "lequipe.fr", "ouest-france.fr", "leparisien.fr", "alternatives-economiques.fr", "diplomatie.gouv.fr", "lalettre.fr", "bulletinquotidien.fr"],
+          //include_domains: ["lemonde.fr", "leparisien.fr", "liberation.fr", "humanite.fr", "lopinion.fr", "la-croix.com", "latribune.fr", "letemps.ch", "lesechos.fr", "lefigaro.fr", "lequipe.fr", "ouest-france.fr", "leparisien.fr", "alternatives-economiques.fr", "diplomatie.gouv.fr", "lalettre.fr", "bulletinquotidien.fr"],
         }),
       }
     );
