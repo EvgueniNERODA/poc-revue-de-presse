@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       data: data
     });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Erreur lors de l\'envoi de l\'email' },
       { status: 500 }

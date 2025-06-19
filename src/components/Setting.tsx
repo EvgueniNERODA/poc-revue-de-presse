@@ -88,7 +88,6 @@ type SettingProps = {
 };
 
 const BUILD_MODE = process.env.NEXT_PUBLIC_BUILD_MODE;
-const VERSION = process.env.NEXT_PUBLIC_VERSION;
 const DISABLED_AI_PROVIDER = process.env.NEXT_PUBLIC_DISABLED_AI_PROVIDER || "";
 const DISABLED_SEARCH_PROVIDER =
   process.env.NEXT_PUBLIC_DISABLED_SEARCH_PROVIDER || "";
@@ -3199,38 +3198,6 @@ function Setting({ open, onClose }: SettingProps) {
                 />
               </TabsContent>
               <TabsContent className="space-y-4 min-h-[250px]" value="general">
-                <FormField
-                  control={form.control}
-                  name="language"
-                  render={({ field }) => (
-                    <FormItem className="from-item">
-                      {/*<FormLabel className="from-label">
-                        <HelpTip tip={t("setting.languageTip")}>
-                          {t("setting.language")}
-                        </HelpTip>
-                      </FormLabel>*/}
-                      {/*<FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger className="form-field">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(locales).map(([code, name]) => {
-                              return (
-                                <SelectItem key={code} value={code}>
-                                  {name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>*/}
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="theme"
