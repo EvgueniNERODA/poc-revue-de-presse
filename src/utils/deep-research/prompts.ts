@@ -25,10 +25,10 @@ export function getSERPQuerySchema() {
           researchGoal: z
             .string()
             .describe(
-              "First talk about the goal of the research that this query is meant to accomplish, then go deeper into how to advance the research once the results are found, mention additional research directions. Be as specific as possible, especially for additional research directions. JSON reserved words should be escaped."
+              "First talk about the goal of the research that this query is meant to accomplish, then go deeper into how to advance the research once the results are found, mention additional research directions. Be as specific as possible, especially for additional research directions. JSON reserved words should be escaped.",
             ),
         })
-        .required({ query: true, researchGoal: true })
+        .required({ query: true, researchGoal: true }),
     )
     .describe(`List of SERP queries.`);
 }
@@ -50,48 +50,58 @@ export function writeReportPlanPrompt(query: string) {
   return reportPlanPrompt.replace("{query}", query);
 }
 
-export function generateSerpQueriesPrompt(plan: string) {
-  return serpQueriesPrompt
+export function generateSerpQueriesPrompt(
+  plan: string,
+  allowedSites: string[],
+) {
+  const prompt = serpQueriesPrompt
     .replace("{plan}", plan)
+    .replace("{allowedSites}", allowedSites.join(", "))
     .replace("{outputSchema}", getSERPQueryOutputSchema());
+  console.log("[DEBUG][PROMPT][SERP Queries]", prompt);
+  return prompt;
 }
 
 export function processResultPrompt(query: string, researchGoal: string) {
-  return queryResultPrompt
+  const prompt = queryResultPrompt
     .replace("{query}", query)
     .replace("{researchGoal}", researchGoal);
+  console.log("[DEBUG][PROMPT][Query Result]", prompt);
+  return prompt;
 }
 
 export function processSearchResultPrompt(
   query: string,
   researchGoal: string,
   results: Source[],
-  enableReferences: boolean
+  enableReferences: boolean,
 ) {
   const context = results.map(
     (result, idx) =>
       `<content index="${idx + 1}" url="${result.url}">\n${
         result.content
-      }\n</content>`
+      }\n</content>`,
   );
-  return (
+  const prompt = (
     searchResultPrompt + (enableReferences ? `\n\n${citationRulesPrompt}` : "")
   )
     .replace("{query}", query)
     .replace("{researchGoal}", researchGoal)
     .replace("{context}", context.join("\n"));
+  console.log("[DEBUG][PROMPT][Search Result]", prompt);
+  return prompt;
 }
 
 export function processSearchKnowledgeResultPrompt(
   query: string,
   researchGoal: string,
-  results: Knowledge[]
+  results: Knowledge[],
 ) {
   const context = results.map(
     (result, idx) =>
       `<content index="${idx + 1}" url="${location.host}">\n${
         result.content
-      }\n</content>`
+      }\n</content>`,
   );
   return searchKnowledgeResultPrompt
     .replace("{query}", query)
@@ -102,10 +112,10 @@ export function processSearchKnowledgeResultPrompt(
 export function reviewSerpQueriesPrompt(
   plan: string,
   learning: string[],
-  suggestion: string
+  suggestion: string,
 ) {
   const learnings = learning.map(
-    (detail) => `<learning>\n${detail}\n</learning>`
+    (detail) => `<learning>\n${detail}\n</learning>`,
   );
   return reviewPrompt
     .replace("{plan}", plan)
@@ -121,17 +131,17 @@ export function writeFinalReportPrompt(
   images: ImageSource[],
   requirement: string,
   enableCitationImage: boolean,
-  enableReferences: boolean
+  enableReferences: boolean,
 ) {
   const learnings = learning.map(
-    (detail) => `<learning>\n${detail}\n</learning>`
+    (detail) => `<learning>\n${detail}\n</learning>`,
   );
   const sources = source.map(
     (item, idx) =>
-      `<source index="${idx + 1}" url="${item.url}">\n${item.title}\n</source>`
+      `<source index="${idx + 1}" url="${item.url}">\n${item.title}\n</source>`,
   );
   const imageList = images.map(
-    (source, idx) => `${idx + 1}. ![${source.description}](${source.url})`
+    (source, idx) => `${idx + 1}. ![${source.description}](${source.url})`,
   );
   return (
     finalReportPrompt +
@@ -145,15 +155,8 @@ export function writeFinalReportPrompt(
     .replace("{requirement}", requirement);
 }
 
-export function writePressReviewPrompt(
-  query: string,
-  startDate: string,
-  endDate: string,
-  allowedSites: string[]
-) {
+export function writePressReviewPrompt(query: string, allowedSites: string[]) {
   return pressReviewPrompt
     .replace("{query}", query)
-    .replace("{startDate}", startDate)
-    .replace("{endDate}", endDate)
     .replace("{allowedSites}", allowedSites.join(", "));
 }

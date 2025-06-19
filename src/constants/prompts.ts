@@ -10,7 +10,7 @@ export const systemInstruction = `You are an expert researcher. Today is {now}. 
 - Provide detailed explanations, I'm comfortable with lots of detail.
 - Value good arguments over authorities, the source is irrelevant.
 - Consider new technologies and contrarian ideas, not just the conventional wisdom.
-- You may use high levels of speculation or prediction, just flag it for me.`;
+- You may use only research result to respond and not your knowkedge.`;
 
 export const outputGuidelinesPrompt = `<OutputGuidelines>
 
@@ -97,6 +97,10 @@ export const serpQueriesPrompt = `This is the report plan after user confirmatio
 {plan}
 </PLAN>
 
+IMPORTANT RESTRICTION:
+- Only generate queries that can be answered using the following websites: {allowedSites}
+- Only consider last day news, dont use your knowledge to answer
+
 Based on previous report plan, generate a list of SERP queries to further research the topic. Make sure each query is unique and not similar to each other.
 
 ${serpQuerySchemaPrompt}`;
@@ -140,7 +144,7 @@ The following context from the SERP search:
 
 IMPORTANT RESTRICTIONS:
 - Only consider content from the following websites: {allowedSites}
-- Only consider content published between {startDate} and {endDate}
+- Only consider content published last day
 - Exclude any content that doesn't meet these criteria
 
 You need to think like a human researcher.
@@ -232,12 +236,13 @@ Please write according to the user's writing requirements:
 {requirement}
 </REQUIREMENT>
 
-Write a final report based on the report plan using the learnings from research.
-Make it as as detailed as possible, aim for 5 pages or more, the more the better, include ALL the learnings from research.
+Write a final report based on the report plan using the learnings from **research ONLY**.
+Make it as detailed as possible, aim for 20 pages maximum, include **ALL the learnings from research**.
+**Exclude your own learning, use only research learning**
 **Including meaningful images from the previous research in the report is very helpful.**
 **Respond only the final report content, and no additional text before or after.**`;
 
-export const rewritingPrompt = `You are tasked with re-writing the following text to markdown. Ensure you do not change the meaning or story behind the text. 
+export const rewritingPrompt = `You are tasked with re-writing the following text to markdown. Ensure you do not change the meaning or story behind the text.
 
 **Respond only the updated markdown text, and no additional text before or after.**`;
 
@@ -253,57 +258,56 @@ export const knowledgeGraphPrompt = `Based on the following article, please extr
 6. All text content **MUST** be wrapped in \`"\` syntax. (e.g., "Any Text Content")
 7. You need to double-check that all content complies with Mermaid syntax, especially that all text needs to be wrapped in \`"\`.`;
 
-export const pressReviewPrompt = `Je suis analyste média en charge de produire une revue de presse quotidienne sur des thématiques spécifiques.
-Je souhaite aujourd'hui effectuer une recherche approfondie sur :
+export const pressReviewPrompt = `You are a media analyst in charge of producing a daily press review on specific topics.
+Today, you are to conduct an in-depth search on:
 <QUERY>
 {query}
 </QUERY>
 
-Période analysée : {startDate} au {endDate}
-Sources autorisées : {allowedSites}
+STRICT CONSTRAINTS TO FOLLOW:
+1. You must ONLY consider sources from the following domains: {{allowedSites}}
+2. You must only report articles published last day
+3. COMPLETELY ignore any content that does not meet the above constraints
+4. For each piece of information reported, explicitly cite the source and the publication date
+5. Do not include duplicate or overly similar articles
+6. Favor diversity in editorial angles (analysis, report, opinion, etc.)
+7. If certain data (comments, SEO, audience) are unavailable, clearly indicate this
+8. Use exclusively the defined sources
 
-Merci de me fournir le résultat structuré suivant :
-1. Synthèse globale de la thématique
- 
-    Résumé synthétique (environ 300 mots) des sujets abordés dans les articles : faits majeurs, analyses, polémiques, acteurs clés, etc.
- 
-    Évolution de la couverture médiatique sur la période.
- 
-    Ton général des commentaires sur les articles (positif, négatif, polémique, satirique, divisé, etc.), s'il est disponible.
- 
-2. Les 5 articles les plus pertinents sur la période
- 
-Pour chaque article, indiquer :
- 
-    Titre complet de l'article
- 
-    Date de publication
- 
-    Résumé (5 à 7 lignes) du contenu de l'article
- 
-    Ton dominant des commentaires (positif / négatif / ironique / conflictuel / factuel / non disponible), avec justification synthétique
- 
-    Source du média (nom du site)
- 
-    Lien URL vers l'article
- 
-    Audience estimée :
-    (élevée / modérée / faible), sur la base :
- 
-        de son classement SEO,
- 
-        de la popularité du média,
- 
-        des signaux sociaux visibles (partages, réactions),
- 
-        ou de données de trafic estimées (si disponibles)
- 
-Contraintes
- 
-    Ne pas inclure d'articles en doublon ou trop similaires.
- 
-    Privilégier la diversité des angles éditoriaux (analyse, reportage, opinion, etc.).
- 
-    Si certaines données (commentaires, SEO, audience) sont indisponibles, l'indiquer clairement.
- 
-    Utiliser exclusivement les sources définies`;
+IMPORTANT: You must provide your answer in French.
+
+Please provide the following structured result:
+1. Overall summary of the topic
+
+    A synthetic summary (about 300 words) of the subjects covered in the articles: major facts, analyses, controversies, key actors, etc.
+
+    Evolution of media coverage over the period.
+
+    General tone of comments on the articles (positive, negative, controversial, satirical, divided, etc.), if available.
+
+2. The 5 most relevant articles over the period
+
+For each article, indicate:
+
+    Full title of the article
+
+    Publication date
+
+    Summary (5 to 7 lines) of the article content
+
+    Dominant tone of the comments (positive / negative / ironic / conflictual / factual / not available), with a brief justification
+
+    Media source (site name)
+
+    URL link to the article
+
+    Estimated audience:
+    (high / moderate / low), based on:
+
+        its SEO ranking,
+
+        the popularity of the media,
+
+        visible social signals (shares, reactions),
+
+        or estimated traffic data (if available)`;

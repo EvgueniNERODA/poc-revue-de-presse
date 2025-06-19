@@ -15,7 +15,6 @@ import { useKnowledgeStore } from "@/store/knowledge";
 import { outputGuidelinesPrompt } from "@/constants/prompts";
 import {
   getSystemPrompt,
-  generateQuestionsPrompt,
   writeReportPlanPrompt,
   generateSerpQueriesPrompt,
   processResultPrompt,
@@ -59,12 +58,7 @@ function useDeepResearch() {
       model: await createModelProvider(thinkingModel),
       system: getSystemPrompt(),
       prompt: [
-        writePressReviewPrompt(
-          question,
-          pressReviewParams.startDate,
-          pressReviewParams.endDate,
-          pressReviewParams.allowedSites
-        ),
+        writePressReviewPrompt(question, pressReviewParams.allowedSites),
         getResponseLanguagePrompt(),
       ].join("\n\n"),
       onError: handleError,
@@ -82,7 +76,7 @@ function useDeepResearch() {
           },
           (data) => {
             reasoning += data;
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         reasoning += part.textDelta;
@@ -100,7 +94,7 @@ function useDeepResearch() {
       model: await createModelProvider(thinkingModel),
       system: getSystemPrompt(),
       prompt: [writeReportPlanPrompt(query), getResponseLanguagePrompt()].join(
-        "\n\n"
+        "\n\n",
       ),
       onError: handleError,
     });
@@ -116,7 +110,7 @@ function useDeepResearch() {
           },
           (data) => {
             reasoning += data;
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         reasoning += part.textDelta;
@@ -163,7 +157,7 @@ function useDeepResearch() {
           },
           (data) => {
             reasoning += data;
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         reasoning += part.textDelta;
@@ -260,7 +254,7 @@ function useDeepResearch() {
           if (resources.length > 0) {
             const knowledges = await searchLocalKnowledges(
               item.query,
-              item.researchGoal
+              item.researchGoal,
             );
             content += [
               knowledges,
@@ -273,7 +267,19 @@ function useDeepResearch() {
           if (enableSearch) {
             if (searchProvider !== "model") {
               try {
-                const results = await search(item.query);
+                // Récupérer les paramètres de la revue de presse
+                const { pressReviewParams } = useTaskStore.getState();
+
+                console.log(
+                  "[DEBUG][runSearchTask] pressReviewParams from store:",
+                  pressReviewParams,
+                );
+
+                // Construire les filtres avec les sites autorisés
+                const searchFilters = {
+                  allowedSites: pressReviewParams?.allowedSites || [],
+                };
+                const results = await search(item.query, searchFilters);
                 sources = results.sources;
                 images = results.images;
 
@@ -285,7 +291,7 @@ function useDeepResearch() {
                 handleError(
                   `[${searchProvider}]: ${
                     err instanceof Error ? err.message : "Search Failed"
-                  }`
+                  }`,
                 );
                 return plimit.clearQueue();
               }
@@ -299,7 +305,7 @@ function useDeepResearch() {
                     item.query,
                     item.researchGoal,
                     sources,
-                    enableReferences
+                    enableReferences,
                   ),
                   getResponseLanguagePrompt(),
                 ].join("\n\n"),
@@ -342,7 +348,7 @@ function useDeepResearch() {
                 },
                 (data) => {
                   reasoning += data;
-                }
+                },
               );
             } else if (part.type === "reasoning") {
               reasoning += part.textDelta;
@@ -358,14 +364,14 @@ function useDeepResearch() {
                     ({ segment, groundingChunkIndices }) => {
                       if (segment.text && groundingChunkIndices) {
                         const index = groundingChunkIndices.map(
-                          (idx: number) => `[${idx + 1}]`
+                          (idx: number) => `[${idx + 1}]`,
                         );
                         content = content.replaceAll(
                           segment.text,
-                          `${segment.text}${index.join("")}`
+                          `${segment.text}${index.join("")}`,
                         );
                       }
-                    }
+                    },
                   );
                 }
               } else if (part.providerMetadata?.openai) {
@@ -384,7 +390,7 @@ function useDeepResearch() {
                   (item, idx) =>
                     `[${idx + 1}]: ${item.url}${
                       item.title ? ` "${item.title.replaceAll('"', " ")}"` : ""
-                    }`
+                    }`,
                 )
                 .join("\n");
           }
@@ -396,7 +402,7 @@ function useDeepResearch() {
           });
           return content;
         });
-      })
+      }),
     );
   }
 
@@ -426,7 +432,7 @@ function useDeepResearch() {
         (text) => {
           content += text;
           const data: PartialJson = parsePartialJson(
-            removeJsonMarkdown(content)
+            removeJsonMarkdown(content),
           );
           if (
             querySchema.safeParse(data.value) &&
@@ -438,14 +444,14 @@ function useDeepResearch() {
                   state: "unprocessed",
                   learning: "",
                   ...pick(item, ["query", "researchGoal"]),
-                })
+                }),
               );
             }
           }
         },
         (text) => {
           reasoning += text;
-        }
+        },
       );
     }
     if (reasoning) console.log(reasoning);
@@ -475,11 +481,11 @@ function useDeepResearch() {
     const learnings = tasks.map((item) => item.learning);
     const sources: Source[] = unique(
       flat(tasks.map((item) => item.sources || [])),
-      (item) => item.url
+      (item) => item.url,
     );
     const images: ImageSource[] = unique(
       flat(tasks.map((item) => item.images || [])),
-      (item) => item.url
+      (item) => item.url,
     );
     const enableCitationImage = images.length > 0 && citationImage === "enable";
     const enableReferences = sources.length > 0 && references === "enable";
@@ -495,7 +501,7 @@ function useDeepResearch() {
           images,
           requirement,
           enableCitationImage,
-          enableReferences
+          enableReferences,
         ),
         getResponseLanguagePrompt(),
       ].join("\n\n"),
@@ -513,7 +519,7 @@ function useDeepResearch() {
           },
           (data) => {
             reasoning += data;
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         reasoning += part.textDelta;
@@ -528,7 +534,7 @@ function useDeepResearch() {
             (item, idx) =>
               `[${idx + 1}]: ${item.url}${
                 item.title ? ` "${item.title.replaceAll('"', " ")}"` : ""
-              }`
+              }`,
           )
           .join("\n");
       updateFinalReport(content);
@@ -546,7 +552,7 @@ function useDeepResearch() {
   }
 
   async function deepResearch() {
-    const { reportPlan } = useTaskStore.getState();
+    const { reportPlan, pressReviewParams } = useTaskStore.getState();
     const { thinkingModel } = getModel();
     setStatus(t("research.common.thinking"));
     try {
@@ -555,7 +561,7 @@ function useDeepResearch() {
         model: await createModelProvider(thinkingModel),
         system: getSystemPrompt(),
         prompt: [
-          generateSerpQueriesPrompt(reportPlan),
+          generateSerpQueriesPrompt(reportPlan, pressReviewParams.allowedSites),
           getResponseLanguagePrompt(),
         ].join("\n\n"),
         onError: handleError,
@@ -571,7 +577,7 @@ function useDeepResearch() {
           (text) => {
             content += text;
             const data: PartialJson = parsePartialJson(
-              removeJsonMarkdown(content)
+              removeJsonMarkdown(content),
             );
             if (querySchema.safeParse(data.value)) {
               if (
@@ -584,7 +590,7 @@ function useDeepResearch() {
                       state: "unprocessed",
                       learning: "",
                       ...pick(item, ["query", "researchGoal"]),
-                    })
+                    }),
                   );
                   taskStore.update(queries);
                 }
@@ -593,7 +599,7 @@ function useDeepResearch() {
           },
           (text) => {
             reasoning += text;
-          }
+          },
         );
       }
       if (reasoning) console.log(reasoning);

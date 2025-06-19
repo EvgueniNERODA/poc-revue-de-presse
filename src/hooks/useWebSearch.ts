@@ -7,8 +7,6 @@ import { multiApiKeyPolling } from "@/utils/model";
 import { generateSignature } from "@/utils/signature";
 
 interface SearchFilters {
-  startDate?: string;
-  endDate?: string;
   allowedSites?: string[];
 }
 
@@ -22,7 +20,18 @@ function useWebSearch() {
       query,
       filter: filters,
     };
+    let constrainedQuery = query;
 
+    // Ajouter les contraintes de site directement dans la query
+    if (filters?.allowedSites && filters.allowedSites.length > 0) {
+      const siteConstraints = filters.allowedSites
+        .map((site) => `site:${site}`)
+        .join(" OR ");
+      constrainedQuery = `${query} (${siteConstraints})`;
+    }
+
+    options.query = constrainedQuery;
+    console.log("Options => ", options);
     switch (searchProvider) {
       case "tavily":
         const { tavilyApiKey, tavilyApiProxy, tavilyScope } =
@@ -75,33 +84,10 @@ function useWebSearch() {
         break;
     }
 
-    const response = await fetch(
-      `${options.baseURL}/search`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(options.apiKey && {
-            Authorization: `Bearer ${options.apiKey}`,
-          }),
-          ...(accessPassword && {
-            "X-Access-Password": generateSignature(accessPassword, Date.now()),
-          }),
-        },
-        body: JSON.stringify({
-          query: options.query,
-          maxResult: options.maxResult,
-          scope: options.scope,
-          filter: options.filter,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Search failed: ${response.statusText}`);
+    if (mode === "proxy") {
+      options.apiKey = generateSignature(accessPassword, Date.now());
     }
-
-    return response.json();
+    return createSearchProvider(options);
   }
 
   return { search };

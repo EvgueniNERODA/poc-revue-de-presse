@@ -37,7 +37,7 @@ import useKnowledge from "@/hooks/useKnowledge";
 import { useTaskStore, type Task } from "@/store/task";
 import { useKnowledgeStore } from "@/store/knowledge";
 import { downloadFile } from "@/utils/file";
-import { renderToStaticMarkup } from 'react-dom/server';
+import { renderToStaticMarkup } from "react-dom/server";
 import useWebSearch from "@/hooks/useWebSearch";
 
 const MagicDown = dynamic(() => import("@/components/MagicDown"));
@@ -77,9 +77,7 @@ function SearchResult() {
     stop: accurateTimerStop,
   } = useAccurateTimer();
   const [isThinking, setIsThinking] = useState<boolean>(false);
-  const [searchFilters, setSearchFilters] = useState<{
-    startDate?: string;
-    endDate?: string;
+  const [searchFilters] = useState<{
     allowedSites?: string[];
   }>({});
   const unfinishedTasks = useMemo(() => {
@@ -112,9 +110,10 @@ function SearchResult() {
 
     try {
       const filters = {
-        startDate: searchFilters.startDate ? new Date(searchFilters.startDate).toISOString() : undefined,
-        endDate: searchFilters.endDate ? new Date(searchFilters.endDate).toISOString() : undefined,
-        allowedSites: searchFilters.allowedSites && searchFilters.allowedSites.length > 0 ? searchFilters.allowedSites : undefined,
+        allowedSites:
+          searchFilters.allowedSites && searchFilters.allowedSites.length > 0
+            ? searchFilters.allowedSites
+            : undefined,
       };
 
       const results = await webSearch(taskStore.suggestion, filters);
@@ -323,9 +322,11 @@ function SearchResult() {
                             sideoffset={8}
                             onClick={() =>
                               downloadFile(
-                                renderToStaticMarkup(getSearchResultContent(item)),
+                                renderToStaticMarkup(
+                                  getSearchResultContent(item),
+                                ),
                                 `${item.query}.md`,
-                                "text/markdown;charset=utf-8"
+                                "text/markdown;charset=utf-8",
                               )
                             }
                           >
@@ -375,7 +376,7 @@ function SearchResult() {
                       <Textarea
                         rows={3}
                         placeholder={t(
-                          "research.searchResult.suggestionPlaceholder"
+                          "research.searchResult.suggestionPlaceholder",
                         )}
                         disabled={isThinking}
                         {...field}

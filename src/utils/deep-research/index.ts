@@ -132,7 +132,7 @@ class DeepResearch {
           },
           (data) => {
             this.onMessage("reasoning", { type: "text", text: data });
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         this.onMessage("reasoning", { type: "text", text: part.textDelta });
@@ -148,7 +148,8 @@ class DeepResearch {
   }
 
   async generateSERPQuery(
-    reportPlan: string
+    reportPlan: string,
+    allowedSites: string[],
   ): Promise<DeepResearchSearchTask[]> {
     this.onMessage("progress", { step: "serp-query", status: "start" });
     const thinkTagStreamProcessor = new ThinkTagStreamProcessor();
@@ -156,7 +157,7 @@ class DeepResearch {
       model: await this.getThinkingModel(),
       system: getSystemPrompt(),
       prompt: [
-        generateSerpQueriesPrompt(reportPlan),
+        generateSerpQueriesPrompt(reportPlan, allowedSites),
         this.getResponseLanguagePrompt(),
       ].join("\n\n"),
     });
@@ -173,7 +174,7 @@ class DeepResearch {
         (item: { query: string; researchGoal?: string }) => ({
           query: item.query,
           researchGoal: item.researchGoal || "",
-        })
+        }),
       );
       this.onMessage("progress", {
         step: "serp-query",
@@ -188,7 +189,7 @@ class DeepResearch {
 
   async runSearchTask(
     tasks: DeepResearchSearchTask[],
-    enableReferences = true
+    enableReferences = true,
   ): Promise<SearchTask[]> {
     this.onMessage("progress", { step: "task-list", status: "start" });
     const thinkTagStreamProcessor = new ThinkTagStreamProcessor();
@@ -275,7 +276,7 @@ class DeepResearch {
               item.query,
               item.researchGoal,
               sources,
-              sources.length > 0 && enableReferences
+              sources.length > 0 && enableReferences,
             ),
             this.getResponseLanguagePrompt(),
           ].join("\n\n"),
@@ -298,7 +299,7 @@ class DeepResearch {
             },
             (data) => {
               this.onMessage("reasoning", { type: "text", text: data });
-            }
+            },
           );
         } else if (part.type === "reasoning") {
           this.onMessage("reasoning", { type: "text", text: part.textDelta });
@@ -314,14 +315,14 @@ class DeepResearch {
                 ({ segment, groundingChunkIndices }) => {
                   if (segment.text && groundingChunkIndices) {
                     const index = groundingChunkIndices.map(
-                      (idx: number) => `[${idx + 1}]`
+                      (idx: number) => `[${idx + 1}]`,
                     );
                     content = content.replaceAll(
                       segment.text,
-                      `${segment.text}${index.join("")}`
+                      `${segment.text}${index.join("")}`,
                     );
                   }
-                }
+                },
               );
             }
           } else if (part.providerMetadata?.openai) {
@@ -338,7 +339,7 @@ class DeepResearch {
           images
             .map(
               (source) =>
-                `![${source.description || source.url}](${source.url})`
+                `![${source.description || source.url}](${source.url})`,
             )
             .join("\n");
         content += imageContent;
@@ -353,7 +354,7 @@ class DeepResearch {
               (item, idx) =>
                 `[${idx + 1}]: ${item.url}${
                   item.title ? ` "${item.title.replaceAll('"', " ")}"` : ""
-                }`
+                }`,
             )
             .join("\n");
         content += sourceContent;
@@ -385,18 +386,18 @@ class DeepResearch {
     reportPlan: string,
     tasks: DeepResearchSearchResult[],
     enableCitationImage = true,
-    enableReferences = true
+    enableReferences = true,
   ): Promise<FinalReportResult> {
     this.onMessage("progress", { step: "final-report", status: "start" });
     const thinkTagStreamProcessor = new ThinkTagStreamProcessor();
     const learnings = tasks.map((item) => item.learning);
     const sources: Source[] = unique(
       flat(tasks.map((item) => item.sources || [])),
-      (item) => item.url
+      (item) => item.url,
     );
     const images: ImageSource[] = unique(
       flat(tasks.map((item) => item.images || [])),
-      (item) => item.url
+      (item) => item.url,
     );
     const result = streamText({
       model: await this.getThinkingModel(),
@@ -409,7 +410,7 @@ class DeepResearch {
           images,
           "",
           images.length > 0 && enableCitationImage,
-          sources.length > 0 && enableReferences
+          sources.length > 0 && enableReferences,
         ),
         this.getResponseLanguagePrompt(),
       ].join("\n\n"),
@@ -426,7 +427,7 @@ class DeepResearch {
           },
           (data) => {
             this.onMessage("reasoning", { type: "text", text: data });
-          }
+          },
         );
       } else if (part.type === "reasoning") {
         this.onMessage("reasoning", { type: "text", text: part.textDelta });
@@ -441,7 +442,7 @@ class DeepResearch {
                 (item, idx) =>
                   `[${idx + 1}]: ${item.url}${
                     item.title ? ` "${item.title.replaceAll('"', " ")}"` : ""
-                  }`
+                  }`,
               )
               .join("\n");
           content += sourceContent;
@@ -475,17 +476,17 @@ class DeepResearch {
   async start(
     query: string,
     enableCitationImage = true,
-    enableReferences = true
+    enableReferences = true,
   ) {
     try {
       const reportPlan = await this.writeReportPlan(query);
-      const tasks = await this.generateSERPQuery(reportPlan);
+      const tasks = await this.generateSERPQuery(reportPlan, []);
       const results = await this.runSearchTask(tasks, enableReferences);
       const finalReport = await this.writeFinalReport(
         reportPlan,
         results,
         enableCitationImage,
-        enableReferences
+        enableReferences,
       );
       return finalReport;
     } catch (err) {

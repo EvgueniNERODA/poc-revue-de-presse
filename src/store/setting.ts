@@ -155,6 +155,6 @@ export const useSettingStore = create(
       update: (values) => set(values),
       reset: () => set(defaultValues),
     }),
-    { name: "setting" }
-  )
+    { name: "setting" },
+  ),
 );

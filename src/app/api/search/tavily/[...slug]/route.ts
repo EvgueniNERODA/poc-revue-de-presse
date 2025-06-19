@@ -22,6 +22,17 @@ export async function POST(req: NextRequest) {
   searchParams.delete("slug");
   const params = searchParams.toString();
 
+  // Use server-side API key if no Authorization header is provided
+  const authHeader =
+    req.headers.get("Authorization") || `Bearer ${process.env.TAVILY_API_KEY}`;
+
+  if (
+    !authHeader ||
+    (!authHeader.includes("Bearer") && !process.env.TAVILY_API_KEY)
+  ) {
+    return NextResponse.json({ error: "API key is required" }, { status: 401 });
+  }
+
   try {
     let url = `${API_PROXY_BASE_URL}/${decodeURIComponent(path.join("/"))}`;
     if (params) url += `?${params}`;
@@ -29,19 +40,37 @@ export async function POST(req: NextRequest) {
       method: req.method,
       headers: {
         "Content-Type": req.headers.get("Content-Type") || "application/json",
-        Authorization: req.headers.get("Authorization") || "",
+        Authorization: authHeader,
       },
       body: JSON.stringify(body),
     };
+    console.log("Payload => ", payload);
+    console.log("URL => ", url);
+
     const response = await fetch(url, payload);
-    return new NextResponse(response.body, response);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Tavily API Error:", response.status, errorText);
       return NextResponse.json(
-        { code: 500, message: error.message },
-        { status: 500 }
+        { error: `Tavily API error: ${response.status}`, details: errorText },
+        { status: response.status },
       );
     }
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Proxy error:", error);
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: "Internal server error", message: error.message },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json(
+      { error: "Unknown error occurred" },
+      { status: 500 },
+    );
   }
 }

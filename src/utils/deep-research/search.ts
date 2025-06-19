@@ -117,32 +117,7 @@ type SearxngSearchResult = {
 };
 
 interface SearchFilter {
-  startDate?: string;
-  endDate?: string;
   allowedSites?: string[];
-}
-
-function filterSearchResults(results: any[], filter: SearchFilter) {
-  return results.filter(result => {
-    // Filtrage par date si spécifié
-    if (filter.startDate || filter.endDate) {
-      const resultDate = new Date(result.publishedDate);
-      if (filter.startDate && resultDate < new Date(filter.startDate)) {
-        return false;
-      }
-      if (filter.endDate && resultDate > new Date(filter.endDate)) {
-        return false;
-      }
-    }
-
-    // Filtrage par site si spécifié
-    if (filter.allowedSites && filter.allowedSites.length > 0) {
-      const resultUrl = new URL(result.url);
-      return filter.allowedSites.some(site => resultUrl.hostname.includes(site));
-    }
-
-    return true;
-  });
 }
 
 export interface SearchProviderOptions {
@@ -166,10 +141,13 @@ export async function createSearchProvider({
 }: SearchProviderOptions) {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${apiKey || process.env.TAVILY_API_KEY}`,
   };
-  if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-
   if (provider === "tavily") {
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+    console.log("Fetch", headers);
     const response = await fetch(
       `${completePath(baseURL || TAVILY_BASE_URL)}/search`,
       {
@@ -178,20 +156,21 @@ export async function createSearchProvider({
         credentials: "omit",
         body: JSON.stringify({
           query,
+          include_domains: [...(filter?.allowedSites || []), "*.fr"],
           search_depth: "advanced",
-          topic: scope || "general",
+          topic: "news",
           max_results: Number(maxResult),
           include_images: true,
           include_image_descriptions: true,
           include_answer: false,
           include_raw_content: true,
         }),
-      }
+      },
     );
     const { results = [], images = [] } = await response.json();
-    const filteredResults = filter ? filterSearchResults(results, filter) : results;
+    console.log("[DEBUG][RESULT][Tavily]", { results, images });
     return {
-      sources: (filteredResults as TavilySearchResult[])
+      sources: (results as TavilySearchResult[])
         .filter((item) => item.content && item.url)
         .map((result) => {
           return {
@@ -219,9 +198,10 @@ export async function createSearchProvider({
           },
           timeout: 60000,
         }),
-      }
+      },
     );
     const { data = [] } = await response.json();
+    console.log("[DEBUG][RESULT][Firecrawl]", data);
     return {
       sources: (data as FirecrawlDocument[])
         .filter((item) => item.description && item.url)
@@ -254,9 +234,10 @@ export async function createSearchProvider({
             },
           },
         }),
-      }
+      },
     );
     const { results = [] } = await response.json();
+    console.log("[DEBUG][RESULT][Exa]", results);
     const images: ImageSource[] = [];
     return {
       sources: (results as ExaSearchResult[])
@@ -291,9 +272,10 @@ export async function createSearchProvider({
           summary: true,
           count: maxResult,
         }),
-      }
+      },
     );
     const { data = {} } = await response.json();
+    console.log("[DEBUG][RESULT][Bocha]", data);
     const results = data.webPages?.value || [];
     const imageResults = data.images?.value || [];
     return {
@@ -306,7 +288,7 @@ export async function createSearchProvider({
         })) as Source[],
       images: (imageResults as BochaImage[]).map((item) => {
         const matchingResult = (results as BochaSearchResult[]).find(
-          (result) => result.url === item.hostPageUrl
+          (result) => result.url === item.hostPageUrl,
         );
         return {
           url: item.contentUrl,
@@ -348,17 +330,18 @@ export async function createSearchProvider({
 
     const response = await fetch(
       `${completePath(
-        baseURL || SEARXNG_BASE_URL
+        baseURL || SEARXNG_BASE_URL,
       )}/search?${searchQuery.toString()}`,
       baseURL?.startsWith(location.origin)
         ? { method: "POST", credentials: "omit", headers }
-        : { method: "GET", credentials: "omit" }
+        : { method: "GET", credentials: "omit" },
     );
     const { results = [] } = await response.json();
+    console.log("[DEBUG][RESULT][Searxng]", results);
     const rearrangedResults = sort(
       results as SearxngSearchResult[],
       (item) => item.score,
-      true
+      true,
     );
     return {
       sources: rearrangedResults
