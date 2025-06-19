@@ -11,7 +11,7 @@ const Setting = dynamic(() => import("@/components/Setting"));
 const Topic = dynamic(() => import("@/components/Research/Topic"));
 const Feedback = dynamic(() => import("@/components/Research/Feedback"));
 const SearchResult = dynamic(
-  () => import("@/components/Research/SearchResult")
+  () => import("@/components/Research/SearchResult"),
 );
 const FinalReport = dynamic(() => import("@/components/Research/FinalReport"));
 const History = dynamic(() => import("@/components/History"));
@@ -37,7 +37,7 @@ function Home() {
   }, [theme, setTheme]);
   return (
     <div className="max-lg:max-w-screen-md max-w-screen-lg mx-auto px-4">
-      {/* <Header /> */}
+      <Header />
       <main>
         <Topic />
         <Feedback />

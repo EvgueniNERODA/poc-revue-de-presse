@@ -22,8 +22,6 @@ export interface ImageSource {
 }
 
 export interface PressReviewParams {
-  startDate: string;
-  endDate: string;
   allowedSites: string[];
 }
 
@@ -90,8 +88,6 @@ const defaultValues: TaskStore = {
   images: [],
   knowledgeGraph: "",
   pressReviewParams: {
-    startDate: "",
-    endDate: "",
     allowedSites: ["lemonde.fr", "leparisien.fr", "lequipe.fr"],
   },
 };
@@ -148,8 +144,9 @@ export const useTaskStore = create(
         } as TaskStore;
       },
       restore: (taskStore) => set(() => ({ ...taskStore })),
-      setPressReviewParams: (params) => set(() => ({ pressReviewParams: params })),
+      setPressReviewParams: (params) =>
+        set(() => ({ pressReviewParams: params })),
     }),
-    { name: "research" }
-  )
+    { name: "research" },
+  ),
 );

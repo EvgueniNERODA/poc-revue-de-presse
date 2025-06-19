@@ -41,8 +41,6 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   topic: z.string().min(1, "Le sujet est requis"),
-  startDate: z.string().min(1, "La date de début est requise"),
-  endDate: z.string().min(1, "La date de fin est requise"),
   allowedSites: z.string().min(1, "Les sites autorisés sont requis"),
 });
 
@@ -65,8 +63,6 @@ function Topic() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       topic: taskStore.question,
-      startDate: taskStore.pressReviewParams.startDate,
-      endDate: taskStore.pressReviewParams.endDate,
       allowedSites: taskStore.pressReviewParams.allowedSites.join(", "),
     },
   });
@@ -94,9 +90,9 @@ function Topic() {
         }
         setQuestion(values.topic);
         setPressReviewParams({
-          startDate: values.startDate,
-          endDate: values.endDate,
-          allowedSites: values.allowedSites.split(",").map(site => site.trim()),
+          allowedSites: values.allowedSites
+            .split(",")
+            .map((site) => site.trim()),
         });
         await askQuestions();
       } finally {
@@ -174,36 +170,17 @@ function Topic() {
           />
           <FormField
             control={form.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date de début</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="endDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date de fin</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="allowedSites"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sites autorisés (séparés par des virgules)</FormLabel>
+                <FormLabel>
+                  Sites autorisés (séparés par des virgules)
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="lemonde.fr, leparisien.fr, lequipe.fr" {...field} />
+                  <Input
+                    placeholder="lemonde.fr, leparisien.fr, lequipe.fr"
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
