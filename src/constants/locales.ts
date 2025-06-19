@@ -1,4 +1,4 @@
 export default {
   "en-US": "English",
-  "fr": "Français",
+  "fr-FR": "Français",
 } as const;

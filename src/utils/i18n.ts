@@ -13,7 +13,7 @@ const normalizeLocale = (locale: string) => {
   } else if (locale.startsWith("es")) {
     return "es-ES";
   } else if (locale.startsWith("fr")) {
-    return "fr";
+    return "fr-FR";
   } else {
     return locale;
   }
