@@ -210,7 +210,7 @@ export function initMcpServer() {
 
       try {
         const deepResearch = initDeepResearchServer({ language });
-        const result = await deepResearch.generateSERPQuery(plan);
+        const result = await deepResearch.generateSERPQuery(plan,["*.fr"]);
         return {
           content: [{ type: "text", text: JSON.stringify(result) }],
         };
