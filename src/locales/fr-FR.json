@@ -1,0 +1,350 @@
+{
+  "title": "Revue de presse",
+  "theme": "Thème",
+  "openSource": "Open Source",
+  "copyright": "Créé avec ❤️ par l'équipe {{name}}",
+  "searchPlaceholder": "Veuillez entrer des mots-clés",
+  "research": {
+    "common": {
+      "startThinking": "Démarrer la recherche",
+      "rethinking": "Re-démarrer la recherche",
+      "thinkingQuestion": "Question de réflexion...",
+      "writeReportPlan": "Écrire le plan",
+      "rewriteReportPlan": "Réécrire le plan",
+      "startResearch": "Démarrer la recherche",
+      "restartResearch": "Re-démarrer la recherche",
+      "writeReport": "Écrire la revue",
+      "continueResearch": "Continuer la recherche",
+      "indepthResearch": "Approfondir la recherche",
+      "rewriteReport": "Réécrire la revue",
+      "sources": "Sources",
+      "thinking": "Réflexion...",
+      "research": "Recherche...",
+      "writing": "Écriture...",
+      "newResearch": "Nouvelle recherche",
+      "addToKnowledgeBase": "Ajouter à la base de connaissances",
+      "addToKnowledgeBaseTip": "Ajouté à la base de connaissances",
+      "restudy": "Re-étudier",
+      "edit": "Éditer",
+      "save": "Enregistrer",
+      "copy": "Copier",
+      "export": "Exporter",
+      "delete": "Supprimer"
+    },
+    "topic": {
+      "title": "1. Thèmes recherchés",
+      "topicLabel": "1.1 Thèmes recherchés",
+      "topicPlaceholder": "Ajoutez un thème à rechercher"
+    },
+    "feedback": {
+      "title": "2. Poser une question",
+      "emptyTip": "En attente du sujet de recherche...",
+      "feedbackLabel": "Votre question (optionnel)",
+      "feedbackPlaceholder": "Vous pouvez demander ce que vous souhaitez...",
+      "questions": "2.1 Questions",
+      "reportPlan": "2.2 Préparation du plan"
+    },
+    "searchResult": {
+      "title": "3. Collecte d'informations",
+      "emptyTip": "En attente de la génération du plan...",
+      "suggestionLabel": "Suggestions de recherche (optionnel)",
+      "suggestionPlaceholder": "Ajouter ou ajuster les directions de recherche...",
+      "references": "Références",
+      "relatedImages": "Images associées"
+    },
+    "finalReport": {
+      "title": "4. Rapport final",
+      "emptyTip": "En attente des informations à rechercher...",
+      "researchedInfor": "{{total}} sites web recherchés",
+      "localResearchedInfor": "{{total}} ressources locales recherchées",
+      "writingRequirementLabel": "Exigences de rédaction (optionnel)",
+      "writingRequirementPlaceholder": "Vous pouvez formuler toute demande liée à la rédaction du rapport.",
+      "sendEmail": "Envoyer par Email",
+      "reSendEmail": "Renvoyer l'Email",
+      "emailNotConfigured": "Email non configuré. Veuillez d'abord configurer les paramètres email.",
+      "emailSent": "Email envoyé avec succès !",
+      "emailError": "Erreur lors de l'envoi de l'email. Veuillez réessayer.",
+      "emailAutoSent": "Rapport envoyé automatiquement par email !",
+      "emailAutoError": "Erreur lors de l'envoi automatique de l'email. Veuillez vérifier votre configuration Resend."
+    }
+  },
+  "history": {
+    "title": "Historique",
+    "description": "L'historique des recherches est stocké localement dans le navigateur et seules les recherches terminées sont sauvegardées.",
+    "name": "Titre",
+    "emptyTip": "Aucun historique",
+    "date": "Date",
+    "actions": "Action",
+    "import": "Importer",
+    "importTip": "Importer une recherche",
+    "importSuccess": "{{title}} importé avec succès.",
+    "importFailed": "Échec de l'importation de {{title}}.",
+    "load": "Charger",
+    "export": "Exporter",
+    "delete": "Supprimer",
+    "loadMore": "Charger plus d'historique",
+    "close": "Fermer",
+    "noHistory": "Aucun historique"
+  },
+  "knowledge": {
+    "title": "Base de connaissances locale",
+    "description": "Une base de connaissances stockée localement dans le navigateur.",
+    "create": "Créer",
+    "createTip": "Créer une nouvelle connaissance",
+    "emptyTip": "Aucun contenu",
+    "name": "Nom",
+    "size": "Taille",
+    "date": "Date",
+    "action": "Action",
+    "add": "Ajouter",
+    "edit": "Éditer",
+    "delete": "Supprimer",
+    "loadMore": "Charger plus de connaissances",
+    "resource": "Ressource",
+    "fileInfor": "Téléversé par l'utilisateur le {{createdAt}}.",
+    "urlInfor": "Récupéré par l'utilisateur le {{createdAt}}.",
+    "createInfor": "Créé par l'utilisateur le {{createdAt}}.",
+    "webCrawler": "Web Crawler",
+    "webCrawlerTip": "Le web crawler obtient le contenu de la page de l'URL spécifiée via le serveur et retourne les données au format Markdown.",
+    "urlPlaceholder": "Veuillez entrer l'URL...",
+    "urlError": "Veuillez entrer une URL valide",
+    "localCrawler": "Crawler local",
+    "clear": "Effacer",
+    "fetch": "Récupérer",
+    "localResourceTitle": "1.2 Fichiers (optionnel)",
+    "addResource": "Ajouter un fichier",
+    "addResourceMessage": "{{title}} a été ajouté à la ressource.",
+    "resourceNotFound": "Ressource non trouvée",
+    "knowledge": "Connaissance",
+    "localFile": "Fichier local",
+    "webPage": "Page web",
+    "editor": {
+      "title": "Titre",
+      "titlePlaceholder": "Veuillez entrer un titre...",
+      "content": "Contenu (Markdown)",
+      "back": "Retour",
+      "reset": "Réinitialiser",
+      "submit": "Soumettre"
+    }
+  },
+  "artifact": {
+    "AIWrite": "Rédaction IA",
+    "writingPromptTip": "Veuillez entrer des instructions de rédaction...",
+    "readingLevel": "Niveau de lecture",
+    "PhD": "Doctorat",
+    "college": "Université",
+    "teenager": "Adolescent",
+    "child": "Enfant",
+    "pirate": "Pirate",
+    "adjustLength": "Ajuster la longueur",
+    "longest": "La plus longue",
+    "long": "Longue",
+    "shorter": "Plus court",
+    "shortest": "Le plus court",
+    "translate": "Traduire",
+    "continuation": "Suite",
+    "addEmojis": "Ajouter des emojis",
+    "send": "Envoyer"
+  },
+  "knowledgeGraph": {
+    "action": "Générer le graphe de connaissances",
+    "regenerate": "Régénérer",
+    "edit": "Éditer",
+    "view": "Voir"
+  },
+  "editor": {
+    "copy": "Copier",
+    "mermaid": {
+      "downloadSvg": "Télécharger comme image",
+      "copyText": "Copier le texte",
+      "zoomIn": "Agrandir",
+      "zoomOut": "Rétrécir",
+      "resize": "Redimensionner"
+    },
+    "tooltip": {
+      "bold": "Gras",
+      "italic": "Italique",
+      "strikethrough": "Barré",
+      "code": "Code",
+      "math": "Math",
+      "link": "Lien",
+      "quote": "Citation"
+    },
+    "slash": {
+      "heading": {
+        "name": "Titre",
+        "description": "Insérer un titre"
+      },
+      "h1": {
+        "name": "Titre 1",
+        "description": "Insérer un titre 1"
+      },
+      "h2": {
+        "name": "Titre 2",
+        "description": "Insérer un titre 2"
+      },
+      "h3": {
+        "name": "Titre 3",
+        "description": "Insérer un titre 3"
+      },
+      "h4": {
+        "name": "Titre 4",
+        "description": "Insérer un titre 4"
+      },
+      "h5": {
+        "name": "Titre 5",
+        "description": "Insérer un titre 5"
+      },
+      "h6": {
+        "name": "Titre 6",
+        "description": "Insérer un titre 6"
+      },
+      "list": {
+        "name": "Liste",
+        "description": "Insérer une liste"
+      },
+      "ul": {
+        "name": "Liste à puces",
+        "description": "Insérer un élément de liste à puces"
+      },
+      "ol": {
+        "name": "Liste ordonnée",
+        "description": "Insérer un élément de liste ordonnée"
+      },
+      "todo": {
+        "name": "Liste de tâches",
+        "description": "Insérer un élément de liste de tâches"
+      },
+      "advanced": {
+        "name": "Avancé",
+        "description": "Commandes avancées"
+      },
+      "link": {
+        "name": "Lien",
+        "description": "Insérer un lien"
+      },
+      "image": {
+        "name": "Image",
+        "description": "Insérer une image"
+      },
+      "code": {
+        "name": "Bloc de code",
+        "description": "Insérer un bloc de code"
+      },
+      "math": {
+        "name": "Bloc mathématique",
+        "description": "Insérer un bloc mathématique"
+      },
+      "table": {
+        "name": "Tableau",
+        "description": "Insérer un tableau 3x3"
+      },
+      "quote": {
+        "name": "Citation",
+        "description": "Insérer une citation"
+      },
+      "horizontal": {
+        "name": "Séparateur",
+        "description": "Insérer un séparateur"
+      }
+    },
+    "placeholder": "Veuillez entrer du texte, ou tapez \"/ \" pour utiliser les commandes"
+  },
+  "setting": {
+    "title": "Paramètres",
+    "description": "Tous les paramètres sont enregistrés dans le navigateur de l'utilisateur.",
+    "model": "Modèle",
+    "general": "Système",
+    "provider": "Fournisseur IA",
+    "providerTip": "Fournisseur de service IA. Pour les services d'agrégation IA comme One Api et New Api, veuillez sélectionner `Compatible OpenAI`.",
+    "openAICompatible": "Compatible OpenAI",
+    "free": "Gratuit",
+    "mode": "Mode API",
+    "modeTip": "En mode local, toutes les requêtes sont envoyées directement par le navigateur. En mode proxy, toutes les requêtes sont transmises via le serveur.",
+    "local": "Local",
+    "proxy": "Proxy",
+    "apiKeyLabel": "Clé API",
+    "apiKeyPlaceholder": "Veuillez entrer la clé API du modèle",
+    "apiUrlLabel": "URL de base de l'API",
+    "apiUrlPlaceholder": "Veuillez entrer l'URL de base de l'API",
+    "resourceNameLabel": "Nom de la ressource",
+    "resourceNamePlaceholder": "Veuillez entrer le nom de la ressource",
+    "apiVersionLabel": "Version de l'API",
+    "apiVersionPlaceholder": "Veuillez entrer la version de l'API",
+    "accessPassword": "Mot de passe d'accès",
+    "accessPasswordPlaceholder": "Veuillez entrer le mot de passe d'accès au serveur",
+    "accessPasswordTip": "L'authentification API côté serveur empêche l'utilisation abusive de l'API par des applications externes.",
+    "thinkingModel": "Modèle de réflexion",
+    "thinkingModelTip": "Le modèle principal utilisé dans la recherche approfondie, il est recommandé d'utiliser le modèle de réflexion.",
+    "networkingModel": "Modèle de tâche",
+    "networkingModelTip": "Le modèle utilisé pour les tâches secondaires, les modèles à haut rendement sont recommandés.",
+    "recommendedModels": "Modèles recommandés",
+    "basicModels": "Modèles de base",
+    "modelListLoadingPlaceholder": "Veuillez sélectionner un modèle",
+    "modelListPlaceholder": "Veuillez entrer le nom du modèle",
+    "refresh": "Rafraîchir la liste des modèles",
+    "modelListLoading": "Chargement de la liste des modèles",
+    "search": "Recherche",
+    "webSearch": "Recherche web",
+    "webSearchTip": "La recherche web permet d'obtenir les dernières données et aide à réduire les 'hallucinations' du modèle. Il est recommandé de l'activer.",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "searchProvider": "Fournisseur de recherche",
+    "searchProviderTip": "Fournisseurs de services de recherche. Certains modèles ont des capacités de recherche réseau intégrées, tandis que la plupart des modèles doivent s'appuyer sur des moteurs de recherche tiers pour obtenir des capacités réseau.",
+    "modelBuiltin": "Modèle intégré",
+    "bocha": "Bocha",
+    "parallelSearch": "Recherche parallèle",
+    "parallelSearchTip": "La recherche parallèle permet d'accélérer le processus de collecte de données, mais un taux trop élevé peut déclencher la limite de requêtes par minute du modèle.",
+    "searchResults": "Résultats de recherche",
+    "searchResultsTip": "Le nombre maximum de recherches web. Certains moteurs de recherche ne prennent pas en charge ce paramètre.",
+    "searchApiKeyPlaceholder": "Veuillez entrer votre clé API",
+    "searchScope": "Portée de la recherche",
+    "scopeValue": {
+      "all": "Tout",
+      "academic": "Académique",
+      "general": "Général",
+      "news": "Actualités",
+      "researchPaper": "Article scientifique",
+      "financial": "Financier",
+      "company": "Entreprise",
+      "personalSite": "Site personnel",
+      "github": "Github",
+      "linkedin": "Linkedin",
+      "pdf": "PDF"
+    },
+    "language": "Langue",
+    "languageTip": "Le système sélectionnera automatiquement la langue de l'interface en fonction de la langue du navigateur de l'utilisateur.",
+    "system": "Système",
+    "light": "Clair",
+    "dark": "Sombre",
+    "debug": "Débogage",
+    "debugTip": "Le débogage système peut aider les utilisateurs à capturer les exceptions de requête et à localiser les erreurs inconnues. Normalement, il n'est pas nécessaire de l'activer.",
+    "PWA": "Installer PWA",
+    "PWATip": "Une Progressive Web App est une application construite avec les technologies du web qui offre une expérience utilisateur proche de celle des applications natives.",
+    "installlPWA": "Installer l'application navigateur (PWA)",
+    "resetSetting": "Réinitialiser les paramètres",
+    "resetAllSettings": "Réinitialiser les paramètres et vider le cache",
+    "resetSettingWarning": "Cette opération effacera toutes les données et réinitialisera le projet.",
+    "version": "Version actuelle",
+    "checkForUpdate": "Vérifier les mises à jour",
+    "experimental": "Expérimental",
+    "references": "Références",
+    "referencesTip": "L'activation des références ajoutera des liens de référence aux résultats de recherche et aux rapports finaux via un prompt. Cela peut ne pas bien fonctionner pour les petits modèles.",
+    "citationImage": "Image de citation",
+    "citationImageTip": "L'activation des images de référence tentera d'ajouter des images liées au contenu dans le rapport final via un prompt.",
+    "email": {
+      "title": "Paramètres Email",
+      "enabled": "Notification Email",
+      "enabledTip": "Activer l'envoi automatique d'email lorsque le rapport est terminé.",
+      "address": "Adresse Email",
+      "addressPlaceholder": "Entrez l'adresse email pour recevoir le rapport",
+      "subject": "Sujet de l'Email",
+      "subjectPlaceholder": "Entrez le sujet de l'email (optionnel)",
+      "body": "Corps de l'Email",
+      "bodyPlaceholder": "Entrez le texte du corps de l'email (optionnel)"
+    },
+    "save": "Enregistrer",
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
+  }
+} 
