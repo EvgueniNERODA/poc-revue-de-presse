@@ -155,7 +155,7 @@ export async function createSearchProvider({
           include_answer: false,
           include_raw_content: true,
           include_domains: ["lemonde.fr", "leparisien.fr", "liberation.fr", "humanite.fr", "lopinion.fr", "la-croix.com", "latribune.fr", "letemps.ch", "lesechos.fr", "lefigaro.fr", "lequipe.fr", "ouest-france.fr", "leparisien.fr", "alternatives-economiques.fr", "diplomatie.gouv.fr", "lalettre.fr", "bulletinquotidien.fr"],
-          coutryl: "france",
+          coutry: "france",
           days: 1,
         }),
       }
