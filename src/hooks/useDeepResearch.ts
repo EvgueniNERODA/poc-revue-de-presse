@@ -29,6 +29,7 @@ import { isNetworkingModel } from "@/utils/model";
 import { ThinkTagStreamProcessor, removeJsonMarkdown } from "@/utils/text";
 import { parseError } from "@/utils/error";
 import { pick, flat, unique } from "radash";
+import { sendEmailWithResend, formatEmailBody, formatEmailSubject } from "@/utils/email";
 
 type ProviderOptions = Record<string, Record<string, JSONValue>>;
 type Tools = Record<string, Tool>;
@@ -536,6 +537,31 @@ function useDeepResearch() {
     setSources(sources);
     const id = save(taskStore.backup());
     setId(id);
+    
+    const { emailEnabled, emailAddress, emailSubject, emailBody } = useSettingStore.getState();
+    if (emailEnabled === "enable" && emailAddress && content) {
+      try {
+        const subject = emailSubject || formatEmailSubject(title);
+        const body = emailBody || formatEmailBody(title);
+        
+        const success = await sendEmailWithResend({
+          to: emailAddress,
+          subject,
+          body,
+          reportContent: content,
+          reportTitle: title
+        });
+        
+        if (success) {
+          toast.success(t("research.finalReport.emailAutoSent")); 
+        } else {
+          toast.error(t("research.finalReport.emailAutoError"));
+        }
+      } catch (error) {
+        toast.error(t("research.finalReport.emailAutoError"));
+      }
+    }
+    
     return content;
   }
 

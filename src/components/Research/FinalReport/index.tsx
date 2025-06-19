@@ -9,6 +9,7 @@ import {
   LoaderCircle,
   NotebookText,
   Waypoints,
+  Mail,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,6 +38,8 @@ import { useTaskStore } from "@/store/task";
 import { useKnowledgeStore } from "@/store/knowledge";
 import { getSystemPrompt } from "@/utils/deep-research/prompts";
 import { downloadFile } from "@/utils/file";
+import { sendEmailWithResend, formatEmailBody, formatEmailSubject } from "@/utils/email";
+import { useSettingStore } from "@/store/setting";
 
 const MagicDown = dynamic(() => import("@/components/MagicDown"));
 const Artifact = dynamic(() => import("@/components/Artifact"));
@@ -51,6 +54,7 @@ function FinalReport() {
   const taskStore = useTaskStore();
   const { status, writeFinalReport } = useDeepResearch();
   const { generateId } = useKnowledge();
+  const { emailEnabled, emailAddress, emailSubject, emailBody } = useSettingStore();
   const {
     formattedTime,
     start: accurateTimerStart,
@@ -138,6 +142,36 @@ function FinalReport() {
     document.title = taskStore.title;
     window.print();
     document.title = originalTitle;
+  }
+
+  async function handleSendEmail() {
+    try {
+      if (emailEnabled !== "enable" || !emailAddress) {
+        toast.error(t("research.finalReport.emailNotConfigured"));
+        return;
+      }
+
+      // Préparer l'email
+      const subject = emailSubject || formatEmailSubject(taskStore.title);
+      const body = emailBody || formatEmailBody(taskStore.title);
+      
+      // Envoyer l'email avec Resend
+      const success = await sendEmailWithResend({
+        to: emailAddress,
+        subject,
+        body,
+        reportContent: getFinakReportContent(),
+        reportTitle: taskStore.title
+      });
+      
+      if (success) {
+        toast.success(t("research.finalReport.emailSent"));
+      } else {
+        toast.error(t("research.finalReport.emailError"));
+      }
+    } catch (error) {
+      toast.error(t("research.finalReport.emailError"));
+    }
   }
 
   useEffect(() => {
@@ -234,6 +268,14 @@ function FinalReport() {
                         <Signature />
                         <span>PDF</span>
                       </DropdownMenuItem>
+                      {emailEnabled === "enable" && emailAddress && (
+                        <DropdownMenuItem
+                          onClick={() => handleSendEmail()}
+                        >
+                          <Mail />
+                          <span>{t("research.finalReport.sendEmail")}</span>
+                        </DropdownMenuItem>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </>
@@ -304,23 +346,70 @@ function FinalReport() {
                   </FormItem>
                 )}
               />
-              <Button
-                className="w-full mt-4"
-                type="submit"
-                disabled={isWriting}
-              >
-                {isWriting ? (
-                  <>
-                    <LoaderCircle className="animate-spin" />
-                    <span>{status}</span>
-                    <small className="font-mono">{formattedTime}</small>
-                  </>
-                ) : taskStore.finalReport === "" ? (
-                  t("research.common.writeReport")
-                ) : (
-                  t("research.common.rewriteReport")
-                )}
-              </Button>
+              <div className="flex justify-center gap-4">
+                <Button
+                  className="mt-4"
+                  type="button"
+                  disabled={isWriting}
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    // Action de renvoi manuel de l'email
+                    try {
+                      setIsWriting(true);
+                      const title = (taskStore.finalReport || "")
+                        .split("\n")[0]
+                        .replaceAll("#", "")
+                        .replaceAll("*", "")
+                        .trim();
+                      const subject = emailSubject || formatEmailSubject(title);
+                      const body = emailBody || formatEmailBody(title);
+                      const success = await sendEmailWithResend({
+                        to: emailAddress,
+                        subject,
+                        body,
+                        reportContent: taskStore.finalReport,
+                        reportTitle: title
+                      });
+                      if (success) {
+                        toast.success(t("research.finalReport.emailSent"));
+                      } else {
+                        toast.error(t("research.finalReport.emailError"));
+                      }
+                    } catch (error) {
+                      toast.error(t("research.finalReport.emailError"));
+                    } finally {
+                      setIsWriting(false);
+                    }
+                  }}
+                >
+                  {isWriting ? (
+                    <>
+                      <LoaderCircle className="animate-spin" />
+                      <span>{status}</span>
+                      <small className="font-mono">{formattedTime}</small>
+                    </>
+                  ) : (
+                    t("research.finalReport.reSendEmail")
+                  )}
+                </Button>
+                <Button
+                  className="mt-4"
+                  type="submit"
+                  disabled={isWriting}
+                >
+                  {isWriting ? (
+                    <>
+                      <LoaderCircle className="animate-spin" />
+                      <span>{status}</span>
+                      <small className="font-mono">{formattedTime}</small>
+                    </>
+                  ) : taskStore.finalReport === "" ? (
+                    t("research.common.writeReport")
+                  ) : (
+                    t("research.common.rewriteReport")
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
         ) : null}

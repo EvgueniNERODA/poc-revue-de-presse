@@ -53,12 +53,19 @@
       "relatedImages": "Related Images"
     },
     "finalReport": {
-      "title": "4. Revue finale",
-      "emptyTip": "En attente de données à collecter...",
-      "researchedInfor": "Recherché sur {{total}} websites",
-      "localResearchedInfor": "Recherché {{total}} local resources",
-      "writingRequirementLabel": "Suggéstions d'écriture (optionnel)",
-      "writingRequirementPlaceholder": "Vous pouvez poser des question en rapport avec la revue générée."
+      "title": "4. Final Report",
+      "emptyTip": "En attente des information à rechercher...",
+      "researchedInfor": "Researched {{total}} websites",
+      "localResearchedInfor": "Researched {{total}} local resources",
+      "writingRequirementLabel": "Writing requirements (optional)",
+      "writingRequirementPlaceholder": "You can raise any request related to report writing.",
+      "sendEmail": "Send Email",
+      "reSendEmail": "Re-send Email",
+      "emailNotConfigured": "Email not configured. Please configure email settings first.",
+      "emailSent": "Email sent successfully!",
+      "emailError": "Error sending email. Please try again.",
+      "emailAutoSent": "Report automatically sent by email!",
+      "emailAutoError": "Error sending automatic email. Please check your Resend configuration."
     }
   },
   "history": {
@@ -325,6 +332,17 @@
     "referencesTip": "Enabling references will add reference links to search results and final reports via prompt. This may not work well for small models.",
     "citationImage": "Citation Image",
     "citationImageTip": "Enabling reference images will attempt to add content-related images to the final report through a prompt.",
+    "email": {
+      "title": "Email Settings",
+      "enabled": "Email Notification",
+      "enabledTip": "Enable automatic email sending when the report is completed.",
+      "address": "Email Address",
+      "addressPlaceholder": "Enter the email address to receive the report",
+      "subject": "Email Subject",
+      "subjectPlaceholder": "Enter the email subject (optional)",
+      "body": "Email Body",
+      "bodyPlaceholder": "Enter the email body text (optional)"
+    },
     "save": "Save",
     "confirm": "Confirm",
     "cancel": "Cancel"
