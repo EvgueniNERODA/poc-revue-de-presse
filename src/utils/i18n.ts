@@ -12,6 +12,8 @@ const normalizeLocale = (locale: string) => {
     return "zh-CN";
   } else if (locale.startsWith("es")) {
     return "es-ES";
+  } else if (locale.startsWith("fr")) {
+    return "fr";
   } else {
     return locale;
   }
@@ -46,7 +48,8 @@ i18next
   )
   .init({
     supportedLngs: keys(locales),
-    fallbackLng: "en-US",
+    fallbackLng: "fr",
+    lng: "fr",
   });
 
 export default i18next;
