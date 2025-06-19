@@ -375,7 +375,7 @@ function FinalReport() {
                       } else {
                         toast.error(t("research.finalReport.emailError"));
                       }
-                    } catch (error) {
+                    } catch (_error) {
                       toast.error(t("research.finalReport.emailError"));
                     } finally {
                       setIsWriting(false);

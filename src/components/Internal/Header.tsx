@@ -1,6 +1,6 @@
 "use client";
 import { useTranslation } from "react-i18next";
-import { Settings, Github, History, BookText } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Button } from "@/components/Internal/Button";
 import { useGlobalStore } from "@/store/global";
 
@@ -8,7 +8,7 @@ const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
 function Header() {
   const { t } = useTranslation();
-  const { setOpenSetting, setOpenHistory, setOpenKnowledge } = useGlobalStore();
+  const { setOpenSetting v} = useGlobalStore();
 
   return (
     <>
@@ -19,24 +19,6 @@ function Header() {
           </h1>
         </div>
         <div className="flex">
-          {/*<Button
-            className="h-8 w-8"
-            variant="ghost"
-            size="icon"
-            title={t("history.title")}
-            onClick={() => setOpenHistory(true)}
-          >
-            <History className="h-5 w-5" />
-          </Button>*/}
-          {/*<Button
-            className="h-8 w-8"
-            variant="ghost"
-            size="icon"
-            title={t("knowledge.title")}
-            onClick={() => setOpenKnowledge(true)}
-          >
-            <BookText />
-          </Button>*/}
           <Button
             className="h-8 w-8"
             title={t("setting.title")}
