@@ -148,22 +148,25 @@ export async function createSearchProvider({
       "Content-Type": "application/json",
     };
     console.log("Fetch", headers);
-    const response = await fetch(`/api/search/tavily/search`, {
-      method: "POST",
-      headers,
-      credentials: "omit",
-      body: JSON.stringify({
-        query,
-        include_domains: [...(filter?.allowedSites || []), "*.fr"],
-        search_depth: "advanced",
-        topic: "news",
-        max_results: Number(maxResult),
-        include_images: true,
-        include_image_descriptions: true,
-        include_answer: false,
-        include_raw_content: true,
-      }),
-    });
+    const response = await fetch(
+      `${completePath(baseURL || TAVILY_BASE_URL)}/search`,
+      {
+        method: "POST",
+        headers,
+        credentials: "omit",
+        body: JSON.stringify({
+          query,
+          include_domains: [...(filter?.allowedSites || []), "*.fr"],
+          search_depth: "advanced",
+          topic: "news",
+          max_results: Number(maxResult),
+          include_images: true,
+          include_image_descriptions: true,
+          include_answer: false,
+          include_raw_content: true,
+        }),
+      },
+    );
     const { results = [], images = [] } = await response.json();
     console.log("[DEBUG][RESULT][Tavily]", { results, images });
     return {
