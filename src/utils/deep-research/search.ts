@@ -144,9 +144,7 @@ export async function createSearchProvider({
     Authorization: `Bearer ${apiKey || process.env.TAVILY_API_KEY}`,
   };
   if (provider === "tavily") {
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-    };
+
     console.log("Fetch", headers);
     const response = await fetch(
       `${completePath(baseURL || TAVILY_BASE_URL)}/search`,
